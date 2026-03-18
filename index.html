@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AquaFlow | Advanced Swimming Training</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&family=Outfit:wght@400;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/main.css">
+    
+    <!-- MediaPipe & TensorFlow.js -->
+    <script src="https://cdn.jsdelivr.net/npm/@mediapipe/camera_utils/camera_utils.js" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@mediapipe/control_utils/control_utils.js" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@mediapipe/drawing_utils/drawing_utils.js" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@mediapipe/pose/pose.js" crossorigin="anonymous"></script>
+</head>
+<body>
+
+    <!-- Blurry Animated Background Elements -->
+    <div class="blob blob-1"></div>
+    <div class="blob blob-2"></div>
+    <div class="blob blob-3"></div>
+    
+    <!-- Navigation -->
+    <nav class="navbar glass">
+        <div class="nav-container">
+            <a href="index.html" class="logo">Aqua<span class="highlight">Flow</span></a>
+            <ul class="nav-links">
+                <li><a href="index.html" class="active">Home</a></li>
+                <li><a href="motion.html">Motion Lab</a></li>
+                <li><a href="coach.html">AI Coach</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <header class="hero">
+        <div class="hero-content" style="max-width: 600px;">
+            <h1 class="hero-title">Discover the Future of <br><span class="gradient-text">Swim Training</span></h1>
+            <p class="hero-subtitle">Experience our AI-powered web platform designed to analyze your biomechanics and provide elite 24/7 coaching feedback.</p>
+            <div class="hero-actions">
+                <a href="motion.html" class="btn btn-primary btn-large">Try Motion Lab</a>
+                <a href="coach.html" class="btn btn-secondary btn-large">Talk to AI Coach</a>
+            </div>
+        </div>
+        <div class="hero-visual">
+            <div class="glass-card hero-card">
+                <div class="card-header">
+                    <span class="badge">Today's Focus</span>
+                </div>
+                <h3>Distance Free Build</h3>
+                <div class="workout-stats">
+                    <div class="stat"><span class="value">3.5</span><span class="label">km</span></div>
+                    <div class="stat"><span class="value">Aero</span><span class="label">Zone 2</span></div>
+                    <div class="stat"><span class="value">65</span><span class="label">min</span></div>
+                </div>
+            </div>
+            
+             <div class="glass-card hero-card side-card">
+                 <div class="card-header">
+                    <span class="badge badge-accent">AI Insights</span>
+                </div>
+                <h4>Stroke Count Optimized</h4>
+                <p>Reduced from 16 to 14 DPS (Distance Per Stroke).</p>
+            </div>
+        </div>
+    </header>
+
+    <!-- Feature Section: Platform Overview (Replaced Generator) -->
+    <section class="features generator-section">
+        <div class="section-header">
+            <h2>The AquaFlow <span class="highlight">Ecosystem</span></h2>
+            <p>Everything you need to perfect your stroke and optimize your training volume.</p>
+        </div>
+        
+        <div class="tracker-container" style="display: grid; grid-template-columns: 1fr 1fr; gap: 2rem;">
+            <div class="glass-card" style="text-align: center; padding: 3rem 2rem;">
+                 <h3 style="color: var(--accent-cyan); font-size: 1.8rem; margin-bottom: 1rem;">📷 AI Motion Lab</h3>
+                 <p style="color: #a0aec0; margin-bottom: 2rem;">Use your webcam or upload a video to get real-time skeletal tracking. We calculate your Early Vertical Forearm (EVF) angle, head position, and stroke crossing to prevent shoulder injury and maximize pull power.</p>
+                 <a href="motion.html" class="btn btn-primary">Launch Vision Engine</a>
+            </div>
+            
+             <div class="glass-card" style="text-align: center; padding: 3rem 2rem;">
+                 <h3 style="color: var(--accent-blue); font-size: 1.8rem; margin-bottom: 1rem;">🧠 Virtual Head Coach</h3>
+                 <p style="color: #a0aec0; margin-bottom: 2rem;">Ask highly technical questions regarding periodization, sprint sets, or dryland mobility. Getting personalized workout intervals has never been faster.</p>
+                 <a href="coach.html" class="btn btn-secondary">Start Consultation</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Activity Tracker -->
+    <section id="tracker" class="features tracker-section">
+        <div class="section-header">
+            <h2>Your Swimming <span class="highlight">Log</span></h2>
+            <p>Log your daily distances. Data is saved locally in your browser.</p>
+        </div>
+        
+        <div class="tracker-container glass-card">
+            <div class="log-input">
+                <input type="number" id="distanceInput" placeholder="Distance (meters)" min="0" step="50">
+                <button id="logBtn" class="btn btn-secondary">Save Log</button>
+            </div>
+            
+            <div class="stats-overview">
+                <div class="stat-box">
+                    <span class="stat-label">Total Distance</span>
+                    <span id="totalDistance" class="stat-value">0 m</span>
+                </div>
+                <div class="stat-box">
+                    <span class="stat-label">Total Sessions</span>
+                    <span id="totalSessions" class="stat-value">0</span>
+                </div>
+            </div>
+            
+            <table class="log-table">
+                <thead>
+                    <tr>
+                        <th>Date</th>
+                        <th>Distance</th>
+                    </tr>
+                </thead>
+                <tbody id="logBody">
+                    <!-- Logs injected via JS -->
+                </tbody>
+            </table>
+            <button id="clearDataBtn" class="btn btn-danger btn-small">Clear History</button>
+        </div>
+    </section>
+
+    <!-- Removed old Motion Lab and Floating Chat from Homepage -->
+
+    <!-- Script imports -->
+    <script src="js/app.js"></script>
+</body>
+</html>
