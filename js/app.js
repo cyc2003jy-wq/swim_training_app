@@ -826,50 +826,74 @@ function analyzeSwimmingAngles(landmarks) {
     analysisReport.framesAnalyzed++;
     const m = analysisReport.metrics;
 
-    // ============ STROKE CLASSIFICATION ============
+    // ============ STROKE CLASSIFICATION (Enhanced v2.1) ============
     const shoulderMidY = (leftShoulder.y + rightShoulder.y) / 2;
-    const isFaceUp = nose.visibility > 0.5 && nose.y < shoulderMidY - 0.08;
-    const isFaceDown = nose.visibility > 0.5 && nose.y >= shoulderMidY - 0.02;
+    const hipMidY_cls = (leftHip.visibility > 0.3 && rightHip.visibility > 0.3) ? (leftHip.y + rightHip.y) / 2 : shoulderMidY + 0.2;
 
-    // Check arm symmetry (both arms doing similar things simultaneously)
-    const leftArmUp = leftWrist.visibility > 0.4 && leftWrist.y < leftShoulder.y;
-    const rightArmUp = rightWrist.visibility > 0.4 && rightWrist.y < rightShoulder.y;
+    // Face orientation (more robust with ear fallback)
+    const earMidY = (leftEar.visibility > 0.3 && rightEar.visibility > 0.3) ? (leftEar.y + rightEar.y) / 2 : nose.y;
+    const isFaceUp = nose.visibility > 0.4 && (nose.y < shoulderMidY - 0.06 || earMidY < shoulderMidY - 0.04);
+    const isFaceDown = nose.visibility > 0.4 && nose.y >= shoulderMidY - 0.01;
+
+    // Arm positions
+    const leftArmUp = leftWrist.visibility > 0.3 && leftWrist.y < leftShoulder.y;
+    const rightArmUp = rightWrist.visibility > 0.3 && rightWrist.y < rightShoulder.y;
     const bothArmsUp = leftArmUp && rightArmUp;
     const oneArmUp = (leftArmUp && !rightArmUp) || (!leftArmUp && rightArmUp);
+    const neitherArmUp = !leftArmUp && !rightArmUp;
 
-    // Arm symmetry check (are both wrists at similar vertical positions?)
+    // Arm symmetry (wrists at similar Y)
     const wristYDiff = Math.abs((leftWrist.y || 0) - (rightWrist.y || 0));
-    const armsSymmetric = wristYDiff < 0.08;
+    const armsSymmetric = wristYDiff < 0.07;
 
-    // Knee width for breaststroke detection
-    let kneeWidth = 0;
+    // Leg metrics
+    let kneeWidth = 0, ankleWidth = 0;
     let shoulderWidth = Math.abs(leftShoulder.x - rightShoulder.x);
-    if (leftKnee.visibility > 0.4 && rightKnee.visibility > 0.4) {
+    if (leftKnee.visibility > 0.3 && rightKnee.visibility > 0.3) {
         kneeWidth = Math.abs(leftKnee.x - rightKnee.x);
     }
-
-    // Vote for stroke type
-    if (isFaceUp && oneArmUp) {
-        strokeVotes.backstroke += 2;
-    } else if (isFaceUp) {
-        strokeVotes.backstroke += 1;
+    if (leftAnkle.visibility > 0.3 && rightAnkle.visibility > 0.3) {
+        ankleWidth = Math.abs(leftAnkle.x - rightAnkle.x);
     }
 
-    if (bothArmsUp && armsSymmetric && isFaceDown) {
-        // Could be butterfly or breaststroke
-        if (kneeWidth > shoulderWidth * 0.9 && kneeWidth > 0) {
-            strokeVotes.breaststroke += 2;
-        } else {
-            strokeVotes.butterfly += 2;
-        }
+    // Kick pattern: breaststroke has wide knees + narrow ankles at kick end
+    const breaststrokeKickPattern = kneeWidth > shoulderWidth * 0.7 && kneeWidth > 0;
+    // Flutter kick: ankles close together, knees close
+    const flutterKickPattern = kneeWidth > 0 && kneeWidth < shoulderWidth * 0.6;
+
+    // === VOTING with weighted signals ===
+    // Backstroke: face up is the strongest single signal
+    if (isFaceUp) {
+        strokeVotes.backstroke += 3;
+        if (oneArmUp) strokeVotes.backstroke += 1;
+        if (flutterKickPattern) strokeVotes.backstroke += 1;
     }
 
-    if (oneArmUp && isFaceDown) {
-        strokeVotes.freestyle += 2;
+    // Freestyle: face down + alternating arms + flutter kick
+    if (isFaceDown && oneArmUp) {
+        strokeVotes.freestyle += 3;
+        if (flutterKickPattern) strokeVotes.freestyle += 1;
     }
 
-    if (armsSymmetric && kneeWidth > shoulderWidth * 0.8 && kneeWidth > 0) {
+    // Breaststroke: face down + symmetric arms + wide knee kick
+    if (isFaceDown && armsSymmetric && breaststrokeKickPattern) {
+        strokeVotes.breaststroke += 3;
+    } else if (breaststrokeKickPattern && armsSymmetric) {
+        strokeVotes.breaststroke += 2;
+    }
+
+    // Butterfly: face down + both arms up simultaneously + narrow kick
+    if (isFaceDown && bothArmsUp && armsSymmetric && !breaststrokeKickPattern) {
+        strokeVotes.butterfly += 3;
+    } else if (bothArmsUp && armsSymmetric && isFaceDown) {
+        strokeVotes.butterfly += 1;
+    }
+
+    // Breaststroke glide phase: both arms forward, neither up, symmetric
+    if (neitherArmUp && armsSymmetric && isFaceDown) {
         strokeVotes.breaststroke += 1;
+        // Track glide frames
+        m.glideFrames++;
     }
 
     // ============ COLLECT UNIVERSAL METRICS ============
