@@ -91,34 +91,36 @@ Calculate the score for each dimension EXACTLY using this methodology:
 Base your scores and feedback EXACTLY on these criteria. Map the provided biomechanical data to these concepts.
 
 1. FREESTYLE (Front Crawl):
-- Arm Stroke (划手): High Elbow Catch (Early Vertical Forearm) is mandatory. Elbow angle MUST be between 90°-130° during the catch. >150° is a "dropped elbow" (straight arm pull) which loses all water anchorage. Crossover on entry (hand crossing the center longitudinal axis) causes zigzagging. Recovery should be relaxed with a high elbow.
-- Kick (腿部): Hip-driven flutter kick with a slight knee bend (~150°-165°). Excessive knee bend (>140°) acts like a parachute, generating massive drag. Ankle must be plantarflexed.
-- Breathing (换气): Head rotation should be absolute minimal — exactly one goggle lens remaining underwater. Any linear lifting of the head drops the hips instantly. 
-- Body Control (身体控制): Longitudinal body roll of 45°-60° is required to engage the core and lats. Flat shoulders (<30° roll) destroy stroke length and cause shoulder impingement. 
-- Rhythm (配合节奏): 6-beat or 2-beat kick synchronized with the stroke cycle. Avoid "galloping" unless sprinting.
+- Body Position & Core Control: Hips dropping >3 cm below ideal water surface increases drag. Core not engaged leads to lateral body sway (>5 cm) and insufficient shoulder rotation (<30°). Upper torso tilted >15° disrupts alignment. Body roll <30° limits propulsion.
+- Kicking: Ankles too stiff (<15° dorsiflexion) reduces power. Knees over-bent/under-bent by >10° causes inefficient propulsion. Leg force uneven (>10% difference) causes veering. Cycle variation >10% disrupts forward motion.
+- Arm Stroke: Hand entry deviates >5 cm from ideal shoulder line lowers push efficiency. Stroke path deviates from ideal "S" shape by >5 cm wastes energy. Arms exit too early or shallow (<5 cm below ideal) reduces propulsion. Velocity variance >10% disrupts rhythm.
+- Breathing: Head lifted too high (>20°) drops hips and increases drag. Inhale taking >1 second disrupts rhythm. Out of sync with arm stroke (>10% phase offset) causes energy loss. Abrupt head movements destabilize position.
+- Coordination/Rhythm: Arms/legs out of sync (>10% phase difference) reduces propulsion. Period variability >10% causes fatigue. Catch delay (>0.2s) slows motion.
 * Drill Rationales: "Fingertip Drag Drill" reinforces high-elbow recovery. "Catch-up Drill" forces stroke anchoring and prevents midline crossover. "6-Kick Switch" builds core-driven body roll.
 
 2. BREASTSTROKE:
-- Arm Stroke: Strict "Outsweep-Insweep-Shoot" phases. Hands MUST NOT pull past the shoulder line; pulling to the waist kills momentum and causes a dead spot. Elbows must stay high and narrow on the insweep.
-- Kick: Knee abduction (spread) must NOT exceed shoulder width. Drag increases exponentially if knees go too wide. Propulsion comes from aggressive ankle dorsiflexion and the whip-like squeeze of the inner thighs.
-- Breathing: Head must rise naturally WITH the pull, not lift artificially. Eyes look slightly down, not straight ahead.
-- Body Control: Streamline glide phase is non-negotiable. Body must hit a perfectly horizontal line (torso angle <5°) with hands locked forward between every single stroke cycle.
-- Rhythm: Sequential power: Pull → Breathe → Kick → GLIDE. Overlapping the pull and the kick cancels out propulsion.
+- Body Position & Core Control: Body pitched forward/backward >15° increases resistance. Core instability causes arm/leg phase misalignment (>10%). Lateral body sway (>5 cm) wastes energy. Sinking too much shortens glide phase.
+- Kicking: Knees spread too narrow/wide (> shoulder width ±5°) lowers kick efficiency. Insufficient outward foot rotation (< ideal dorsiflexion) reduces push power. Kick not properly synchronized with arms (>10% phase difference) breaks rhythm. Asymmetric leg force (<90% symmetry) causes instability.
+- Arm Stroke: Stroke range too small limits propulsion. Arms stiff wastes energy. Push direction deviates from forward (>10°) lowers efficiency. Speed variance (>10%) breaks rhythm.
+- Breathing: Head lifts too high/low (>20°) affects balance. Breathing out of sync with arms (>10% phase offset) causes water intake errors. Inhale/exhale >1s disrupts flow.
+- Coordination/Rhythm: Arms/legs/breathing out of sync (>10% phase diff) reduces propulsion. Cycle CV >10% produces non-smooth speed. Glide phase too short wastes kick propulsion.
 * Drill Rationales: "2 Kicks 1 Pull" forces patience and maximizes the streamline glide phase. "Heels to Bum Drill" trains the fast recovery of the legs without widening the knees.
 
 3. BACKSTROKE:
-- Arm Stroke: Arm enters perfectly straight, pinky-finger first at exactly 11 o'clock and 1 o'clock relative to the head. The pull must bend to ~90° at the mid-push phase to recruit the lats.
-- Kick: Hip-driven flutter. Knees must NOT break the surface of the water ("bicycle kick" error). Ankles must be loose.
-- Breathing: Steady rhythm, typically inhale on one arm recovery, exhale on the other. Head absolute zero movement. 
-- Body Control: Body roll is CRITICAL. The shoulders must rotate 45° side-to-side, while the head stays perfectly still. Hips sit high, creating a "boiling" water effect near the toes.
+- Body Position & Core Control: Hips drop too low or excessively raised (>3 cm) increases drag. Core instability causes uneven rotation (<30° shoulder tilt). Lateral sway >5 cm wastes energy. Upper body tilt >15° lowers efficiency.
+- Kicking: Knees over/under-bent (>10° deviation) reduces efficiency. Ankles stiff (<15° dorsiflexion) limits water whip. Kick/arm out of sync (>10% phase diff) affects direction. Left/right leg asymmetry (>10%) causes veering.
+- Arm Stroke: Hand entry deviation >5 cm lowers propulsion. Pull path deviation >5 cm wastes energy. Early exit/shallow depth (<5 cm) reduces push. Arm asymmetry (>10%) disrupts rotation.
+- Breathing: Head rotates excessively (>20°) reduces stability. Breathing timing inconsistent (>10% phase diff) disrupts rhythm.
+- Coordination/Rhythm: Insufficient body roll (<30°) reduces power. Arm-leg phase diff >10% slows motion. Rhythm unstable (cycle CV>10%) causes fatigue. Timing mismatch (>0.2s) disperses energy.
 * Drill Rationales: "Cup on Head Drill" forces absolute head stability preventing axis wobbles. "Single Arm Backstroke" forces proper 45-degree rotation.
 
 4. BUTTERFLY:
-- Arm Stroke: Keyhole or hourglass pull pattern. Hands enter at shoulder width, thumb-first slightly, then sweep out, catch, and aggressively push past the hips. Recovery must be symmetric.
-- Kick: Continuous dolphin motion. There MUST be two kicks per arm cycle: a larger "Pulse Kick" when hands enter the water, and a smaller "Power Kick" when hands exit past the hips.
-- Breathing: Chin skates the surface, looking down slightly. Head must re-enter the water BEFORE the hands enter. If hands enter before the head, the hips will sink.
-- Body Control: The wave originates from pressing the CHEST down, not from bending the hips.
-* Drill Rationales: "Bobs / Chest Press Drill" teaches initiating the wave from the sternum. "Right Arm, Left Arm, Double Arm" focuses on timing the kick to the entry without exhaustion.
+- Body Position & Core Control: Vertical undulation too small/excessive (>5 cm deviation) reduces propulsion. Core not engaged causes waist/arms out of sync (>10% phase diff). Lateral sway >5 cm decreases efficiency. Undulation discontinuous lowers speed.
+- Kicking: Kick amplitude too small reduces propulsion. Discontinuous kick breaks rhythm. Upper/lower body out of sync (>10% phase diff) wastes energy.
+- Arm Stroke: Exit speed varies (>10%) produces unstable propulsion. Entry angle incorrect (>10° dev) wastes energy. Stiff arm exit reduces next power phase. Arm asymmetry (>10%) causes core misalignment.
+- Breathing: Head lifts too high/late (>20°) lowers hips. Breathing out-of-sync (>10% phase diff) reduces propulsion. Head rotation (>20°) disrupts undulation. Abrupt movements break rhythm.
+- Coordination/Rhythm: Arms/waist out of sync (>10% phase diff) reduces propulsion. Kick-arm mismatch (>10%) breaks rhythm. Poor control causes rapid fatigue.
+* Drill Rationales: "Bobs / Chest Press Drill" teaches initiating the wave from the sternum. "Right Arm, Left Arm, Double Arm" focuses on timing the kick to the entry.
 
 === REPORT STRUCTURE (FOLLOW EXACTLY) ===
 
