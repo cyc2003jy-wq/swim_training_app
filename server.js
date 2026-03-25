@@ -75,51 +75,47 @@ app.post('/api/analyze', async (req, res) => {
 
 === YOUR RULES (STRICT) ===
 1. Write ENTIRELY in English. No Chinese characters.
-2. NEVER show raw numbers, joint angles, percentages, or metric values. Translate everything into descriptive coaching language.
-3. For improvement items in Section 4, assign priority: 🔴 HIGH PRIORITY (fix first) or 🟡 MEDIUM PRIORITY (fix later).
+2. NEVER show raw numbers, joint angles, percentages, or metric values in the text summary or suggestions. However, you MUST use the provided data to mathematically calculate the scores.
+3. For improvement items, assign priority: 🔴 HIGH PRIORITY (fix first) or 🟡 MEDIUM PRIORITY (fix later).
 4. Do NOT invent issues not supported by the data.
 5. Keep the report concise and professional — around 500 words total.
 
-=== STROKE-SPECIFIC KNOWLEDGE BASE ===
-Use this to interpret the metrics and assign scores. Metrics are normalized pose-tracking values.
+=== QUANTITATIVE SCORING SYSTEM ===
+Calculate the score for each dimension EXACTLY using this methodology:
+1. Deviation = abs(user_value - ideal_value)
+2. Base Score = max(0, 100 - k * deviation) [k is a sensitivity multiplier you determine based on the metric's severity]
+3. Overall Score = (0.25 * Arm Stroke) + (0.25 * Kick) + (0.15 * Breathing) + (0.20 * Body Control) + (0.15 * Rhythm & Timing). You may slightly adjust weights based on the stroke's characteristics.
 
-## FREESTYLE:
-- Arm Stroke: high elbow catch (elbow angle 90-130° is ideal, >150° is dropped), crossover on entry, recovery width
-- Kick: hip-driven flutter, hip drop indicates weak kick/core
-- Breathing: head should stay neutral, one goggle in water
-- Body Control: shoulder tilt indicates rotation (too flat = no rotation, too much = over-rotating)
-- Rhythm: arm alternation pattern, consistency of stroke cycle
+=== STROKE-SPECIFIC EVALUATION METRICS ===
+Base your scores on these specific criteria. Map the provided biomechanical data to these conceptual metrics as best as possible.
 
-## BACKSTROKE:
-- Arm Stroke: straight arm entry pinky-first at 11/1 o'clock, pull depth
-- Kick: hip-driven flutter, no bicycle kick (knees breaking surface)
-- Breathing: head stability is key, must be motionless
-- Body Control: hips near surface (no sitting), moderate rotation
-- Rhythm: even arm alternation, steady tempo
+1. FREESTYLE (Front Crawl):
+- Arm Stroke (划手): Entry point deviation from shoulder line (< 5cm → 100, 5-10cm → 70, >10cm → 40). Hand trajectory deviation from ideal "S" pull path.
+- Kick (腿部): Knee bend and ankle rotation bend within ideal range ±5° → 100.
+- Breathing (换气): Head elevation angle (< 20°) & sync deviation with arm pull (< 5%).
+- Body Control (身体控制): Hip drop deviation from surface (< 3cm) & Body roll angle (> 30° → 100).
+- Rhythm (配合节奏): Stroke-kick-breath cycle variability (STD < 5% → 100).
 
-## BREASTSTROKE:
-- Arm Stroke: scull don't pull, hands never past shoulder line, arm symmetry
-- Kick: knee width within shoulders (too wide = drag), symmetric power
-- Breathing: rises naturally from pull, not forced lift
-- Body Control: streamline glide phase exists, body line during glide
-- Rhythm: pull → breathe → kick → glide timing, presence of glide phase
+2. BREASTSTROKE:
+- Arm Stroke: Elbow abduction amplitude, propulsion vector deviation (< 5° → 100).
+- Kick: Knee abduction angle and ankle rotation (knees close to shoulder width ±5° → 100).
+- Breathing: Head elevation angle, sync with arm pull (< 5° & sync ±5% → 100).
+- Body Control: Torso to surface angle, core coordination (deviation < 5° → 100).
+- Rhythm: Arm-leg-breathing sequence alignment error (< 5% → 100).
 
-## BUTTERFLY:
-- Arm Stroke: symmetric recovery, shoulder-width entry
-- Kick: double dolphin kick per cycle, body undulation amplitude
-- Breathing: head enters WITH hands, chin tucked
-- Body Control: chest press initiates undulation, no stiff torso
-- Rhythm: kick timing (one on entry, one on pull), arm-kick coordination
+3. BACKSTROKE:
+- Arm Stroke: Entry point, pull path linearity (deviation < 5cm → 100).
+- Kick: Knee bend angle, kick rhythm (angle ±5° → 100).
+- Breathing: Head rotation angle, breathing timing (deviation < 5° & timing dev < 5% → 100).
+- Body Control: Body axis rotation (≥ 45° → 100).
+- Rhythm: Arm-leg cycle difference (< 5% → 100).
 
-=== SCORING GUIDE ===
-Score each dimension from 0 to 100 based on the data:
-- 90-100: Excellent, near-perfect technique
-- 75-89: Good, minor adjustments needed
-- 60-74: Moderate, clear room for improvement
-- 40-59: Needs significant work
-- Below 40: Fundamental issues
-
-The OVERALL SCORE should be a weighted average reflecting the swimmer's general proficiency across all dimensions.
+4. BUTTERFLY:
+- Arm Stroke: Arm recovery speed, entry angle (deviation < 5° & speed fluctuation < 5% → 100).
+- Kick: Knee-ankle displacement amplitude, continuous double kick (deviation < 5cm & good continuity → 100).
+- Breathing: Head lift amplitude, breathing timing (deviation < 5° & timing diff < 5% → 100).
+- Body Control: Torso undulation wave vs standard wave error (< 5cm → 100).
+- Rhythm: Arm to core undulation alignment error (< 5% → 100).
 
 === REPORT STRUCTURE (FOLLOW EXACTLY) ===
 
@@ -144,13 +140,13 @@ Use these one-word ratings: Excellent / Good / Fair / Needs Work / Poor
 ### 3. Summary
 
 **What you're doing well:**
-A short paragraph (2-3 sentences) describing the swimmer's strengths in a natural, flowing way. Reference the scoring dimensions but write it as normal text, not a bullet list.
+A short paragraph (2-3 sentences) describing strengths naturally. Reference scoring dimensions. No raw bullet lists.
 
 **What needs attention:**
-A short paragraph (2-3 sentences) describing the main areas to work on. Write naturally — no bullet points or special symbols, just clear coaching language.
+A short paragraph (2-3 sentences) describing weaknesses naturally. No raw bullet lists.
 
 ### 4. Improvement Suggestions
-List 2-4 concrete suggestions with priority tags:
+List concrete suggestions with priority tags:
 - 🔴 **[Issue]**: One sentence describing the problem → One sentence coaching cue to fix it
 - 🟡 **[Issue]**: One sentence describing the problem → One sentence coaching cue to fix it
 
@@ -161,14 +157,14 @@ List 2-4 concrete suggestions with priority tags:
 ---
 **💬 Coach's Note:** End with 2-3 sentences of genuine encouragement. Reference one specific strength, state the single most important next step, and close with motivation.`;
 
-        const userMessage = `Analyze the following swimmer's pose-tracking data and generate my coaching report following the exact structure specified.
+        const userMessage = `Analyze the following swimmer's pose-tracking data and generate my coaching report following the exact structure specified. Calculate scores strictly using the provided deviation formulas and weighted average logic.
 
 Stroke Type: ${stroke}
 
 Pose Metrics:
 ${data}
 
-Remember: Do NOT include any raw numbers in the report. Translate all metrics into descriptive coaching language. Follow the 5-section report structure exactly.`;
+Remember: Do NOT include raw numbers in the text output. Translate all metrics into descriptive coaching language. Follow the 5-section report structure exactly.`;
 
 
         const response = await fetch("https://api.deepseek.com/chat/completions", {
