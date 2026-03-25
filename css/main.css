@@ -1514,3 +1514,61 @@ select:focus, input[type="number"]:focus {
         grid-template-columns: 1fr !important;
     }
 }
+
+/* =========================================
+   MARKDOWN TABLE & REPORT STYLING (AI)
+   ========================================= */
+#aiFeedbackBox table, .chat-messages table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 1.5rem 0;
+    font-size: 0.95rem;
+    overflow: hidden;
+    border-radius: var(--radius-sm);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+    background: rgba(10, 25, 47, 0.4);
+}
+
+#aiFeedbackBox th, .chat-messages th {
+    background: linear-gradient(90deg, rgba(0, 242, 254, 0.15), rgba(35, 116, 225, 0.15));
+    color: var(--accent-cyan);
+    font-weight: 600;
+    text-align: left;
+    padding: 12px 15px;
+    border-bottom: 2px solid rgba(0, 242, 254, 0.3);
+}
+
+#aiFeedbackBox td, .chat-messages td {
+    padding: 12px 15px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    color: #e2e8f0;
+}
+
+#aiFeedbackBox tr:last-child td, .chat-messages tr:last-child td {
+    border-bottom: none;
+}
+
+#aiFeedbackBox tr:hover td, .chat-messages tr:hover td {
+    background: rgba(255, 255, 255, 0.05);
+}
+
+#aiFeedbackBox ul, #aiFeedbackBox ol, .chat-messages ul, .chat-messages ol {
+    margin-bottom: 1rem;
+    padding-left: 1.5rem;
+}
+
+#aiFeedbackBox li, .chat-messages li {
+    margin-bottom: 0.5rem;
+    line-height: 1.6;
+}
+
+#aiFeedbackBox h2, #aiFeedbackBox h3, #aiFeedbackBox h4, 
+.chat-messages h2, .chat-messages h3, .chat-messages h4 {
+    color: #fff;
+    margin-top: 1.5rem;
+    margin-bottom: 0.75rem;
+}
+
+#aiFeedbackBox strong, .chat-messages strong {
+    color: var(--accent-cyan);
+}
