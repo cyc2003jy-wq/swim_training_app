@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>AquaFlow | Advanced Swimming Training</title>
+    <meta name="description" content="AquaFlow is an AI-powered swimming training platform with real-time biomechanical analysis and elite 24/7 coaching.">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&family=Outfit:wght@400;700;900&display=swap" rel="stylesheet">
@@ -16,18 +17,28 @@
     <script src="https://cdn.jsdelivr.net/npm/@mediapipe/pose/pose.js" crossorigin="anonymous"></script>
 </head>
 <body>
-
-    <!-- Blurry Animated Background Elements -->
-    <div class="blob blob-1"></div>
-    <div class="blob blob-2"></div>
-    <div class="blob blob-3"></div>
+    <!-- Dynamic Video Background -->
+    <div class="video-bg-container">
+        <video autoplay loop muted playsinline class="global-bg-video" poster="https://images.unsplash.com/photo-1519315901367-f34ff9154487?auto=format&fit=crop&q=80&w=2000">
+            <source src="https://videos.pexels.com/video-files/856973/856973-hd_1920_1080_30fps.mp4" type="video/mp4">
+            <source src="https://assets.mixkit.co/videos/preview/mixkit-swimmer-doing-the-crawl-in-a-pool-1188-large.mp4" type="video/mp4">
+            <source src="https://upload.wikimedia.org/wikipedia/commons/e/e6/Swimming_Underwater.webm" type="video/webm">
+        </video>
+        <div class="video-overlay"></div>
+    </div>
     
     <!-- Navigation -->
     <nav class="navbar glass">
         <div class="nav-container">
             <a href="index.html" class="logo">Aqua<span class="highlight">Flow</span></a>
-            <ul class="nav-links">
+            <button class="hamburger" id="hamburgerBtn" aria-label="Toggle menu">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+            <ul class="nav-links" id="navLinks">
                 <li><a href="index.html" class="active">Home</a></li>
+                <li><a href="tracker.html">Log</a></li>
                 <li><a href="motion.html">Motion Lab</a></li>
                 <li><a href="coach.html">AI Coach</a></li>
             </ul>
@@ -36,7 +47,7 @@
 
     <!-- Hero Section -->
     <header class="hero">
-        <div class="hero-content" style="max-width: 600px;">
+        <div class="hero-content fade-up" style="max-width: 600px;">
             <h1 class="hero-title">Discover the Future of <br><span class="gradient-text">Swim Training</span></h1>
             <p class="hero-subtitle">Experience our AI-powered web platform designed to analyze your biomechanics and provide elite 24/7 coaching feedback.</p>
             <div class="hero-actions">
@@ -44,91 +55,106 @@
                 <a href="coach.html" class="btn btn-secondary btn-large">Talk to AI Coach</a>
             </div>
         </div>
-        <div class="hero-visual">
-            <div class="glass-card hero-card">
-                <div class="card-header">
-                    <span class="badge">Today's Focus</span>
+        <div class="hero-visual fade-up delay-2" style="perspective: 1200px;">
+            <!-- Main AI HUD Card -->
+            <div class="glass-card hero-card" style="transform: rotateY(-15deg) rotateX(10deg); box-shadow: 0 30px 60px rgba(0, 242, 254, 0.15), inset 0 0 20px rgba(0, 242, 254, 0.1); border: 1px solid rgba(0,242,254,0.3); background: rgba(5, 8, 20, 0.7);">
+                <div class="card-header" style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid rgba(0,242,254,0.1); padding-bottom: 1rem; margin-bottom: 1.5rem;">
+                    <span class="badge" style="background: var(--gradient-primary); color: white; box-shadow: 0 0 15px rgba(0, 242, 254, 0.4); border:none;"><i class="pulse-dot"></i> AI Analysis</span>
+                    <span style="font-family: monospace; color: var(--accent-cyan); letter-spacing: 2px; font-size: 0.85rem;">READY</span>
                 </div>
-                <h3>Distance Free Build</h3>
-                <div class="workout-stats">
-                    <div class="stat"><span class="value">3.5</span><span class="label">km</span></div>
-                    <div class="stat"><span class="value">Aero</span><span class="label">Zone 2</span></div>
-                    <div class="stat"><span class="value">65</span><span class="label">min</span></div>
+                
+                <!-- Circular Metric -->
+                <div style="display: flex; align-items: center; gap: 1.5rem; margin-bottom: 2rem;">
+                    <div style="position: relative; width: 80px; height: 80px; border-radius: 50%; background: conic-gradient(var(--accent-cyan) 85%, transparent 0); display: flex; align-items: center; justify-content: center; box-shadow: 0 0 20px rgba(0,242,254,0.3);">
+                        <div style="width: 70px; height: 70px; background: var(--bg-surface); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 900; font-size: 1.5rem; color: #fff;">85</div>
+                    </div>
+                    <div>
+                        <h4 style="margin: 0; color: #fff; font-size: 1.1rem; text-transform: uppercase;">Technique Score</h4>
+                        <div style="color: var(--accent-cyan); font-size: 0.9rem; font-family: monospace; margin-top: 0.3rem;">✓ EXCELLENT</div>
+                    </div>
+                </div>
+
+                <!-- HUD Data Bars -->
+                <div class="workout-stats" style="flex-direction: column; gap: 1.2rem; border: none; padding: 0; margin: 0;">
+                    <div>
+                        <div style="display: flex; justify-content: space-between; font-size: 0.8rem; font-family: monospace; color: var(--text-muted); margin-bottom: 0.5rem;">
+                            <span>STROKE EFFICIENCY</span> <span style="color: var(--accent-cyan);">92%</span>
+                        </div>
+                        <div style="width: 100%; height: 6px; background: rgba(255,255,255,0.05); border-radius: 10px; overflow: hidden;">
+                            <div style="width: 92%; height: 100%; background: var(--gradient-primary); box-shadow: 0 0 10px var(--accent-cyan);"></div>
+                        </div>
+                    </div>
+                    <div>
+                        <div style="display: flex; justify-content: space-between; font-size: 0.8rem; font-family: monospace; color: var(--text-muted); margin-bottom: 0.5rem;">
+                            <span>BODY POSITION</span> <span style="color: var(--accent-cyan);">88%</span>
+                        </div>
+                        <div style="width: 100%; height: 6px; background: rgba(255,255,255,0.05); border-radius: 10px; overflow: hidden;">
+                            <div style="width: 88%; height: 100%; background: var(--gradient-primary); box-shadow: 0 0 10px var(--accent-cyan);"></div>
+                        </div>
+                    </div>
                 </div>
             </div>
             
-             <div class="glass-card hero-card side-card">
-                 <div class="card-header">
-                    <span class="badge badge-accent">AI Insights</span>
+            <!-- Side Tip Card -->
+             <div class="glass-card hero-card side-card" style="transform: rotateY(-15deg) rotateX(10deg) translateZ(60px); background: rgba(5,8,20,0.85); border-color: rgba(255,0,85,0.3); box-shadow: 0 20px 50px rgba(255,0,85,0.15);">
+                 <div class="card-header" style="border-bottom: 1px solid rgba(255,0,85,0.1); padding-bottom: 0.8rem; margin-bottom: 1rem;">
+                    <span class="badge badge-accent" style="box-shadow: 0 0 10px rgba(255,0,85,0.3); background: rgba(255,0,85,0.15); color: #ff0055;"><span style="color:#ff0055; margin-right: 4px;">▲</span> Improvement Tip</span>
                 </div>
-                <h4>Stroke Count Optimized</h4>
-                <p>Reduced from 16 to 14 DPS (Distance Per Stroke).</p>
+                <h4 style="font-size: 1.1rem; color: #fff; margin-bottom: 0.5rem;">Hand Entry Too Wide</h4>
+                <p style="font-size: 0.85rem; color: #a0aec0; line-height: 1.5; margin-bottom: 0;">Try entering your hand in line with your shoulder. This small fix can boost your speed by up to <span style="color: #ff0055; font-weight: bold;">10%</span>.</p>
             </div>
         </div>
     </header>
 
-    <!-- Feature Section: Platform Overview (Replaced Generator) -->
-    <section class="features generator-section">
+    <!-- Feature Section: Platform Overview -->
+    <section class="features generator-section fade-up">
         <div class="section-header">
             <h2>The AquaFlow <span class="highlight">Ecosystem</span></h2>
             <p>Everything you need to perfect your stroke and optimize your training volume.</p>
         </div>
         
         <div class="tracker-container" style="display: grid; grid-template-columns: 1fr 1fr; gap: 2rem;">
-            <div class="glass-card" style="text-align: center; padding: 3rem 2rem;">
+            <div class="glass-card" style="display: flex; flex-direction: column; align-items: center; text-align: center; padding: 3rem 2rem;">
                  <h3 style="color: var(--accent-cyan); font-size: 1.8rem; margin-bottom: 1rem;">📷 AI Motion Lab</h3>
-                 <p style="color: #a0aec0; margin-bottom: 2rem;">Use your webcam or upload a video to get real-time skeletal tracking. We calculate your Early Vertical Forearm (EVF) angle, head position, and stroke crossing to prevent shoulder injury and maximize pull power.</p>
+                 <p style="color: #a0aec0; margin-bottom: 2rem; flex-grow: 1;">Upload a swimming video for instant AI-powered movement analysis. Our vision engine automatically identifies incorrect stroke mechanics, highlights inefficient techniques, and provides targeted feedback to help you perfect your form and swim faster.</p>
                  <a href="motion.html" class="btn btn-primary">Launch Vision Engine</a>
             </div>
             
-             <div class="glass-card" style="text-align: center; padding: 3rem 2rem;">
+             <div class="glass-card" style="display: flex; flex-direction: column; align-items: center; text-align: center; padding: 3rem 2rem;">
                  <h3 style="color: var(--accent-blue); font-size: 1.8rem; margin-bottom: 1rem;">🧠 Virtual Head Coach</h3>
-                 <p style="color: #a0aec0; margin-bottom: 2rem;">Ask highly technical questions regarding periodization, sprint sets, or dryland mobility. Getting personalized workout intervals has never been faster.</p>
+                 <p style="color: #a0aec0; margin-bottom: 2rem; flex-grow: 1;">Ask highly technical questions regarding seasonal periodization, sprint sets, or targeted dryland mobility routines. Your elite virtual coach instantly generates customized training plans and workout intervals tailored precisely to help you crush your personal bests.</p>
                  <a href="coach.html" class="btn btn-secondary">Start Consultation</a>
             </div>
         </div>
     </section>
-
-    <!-- Activity Tracker -->
-    <section id="tracker" class="features tracker-section">
-        <div class="section-header">
-            <h2>Your Swimming <span class="highlight">Log</span></h2>
-            <p>Log your daily distances. Data is saved locally in your browser.</p>
-        </div>
-        
-        <div class="tracker-container glass-card">
-            <div class="log-input">
-                <input type="number" id="distanceInput" placeholder="Distance (meters)" min="0" step="50">
-                <button id="logBtn" class="btn btn-secondary">Save Log</button>
+    <!-- Footer -->
+    <footer class="site-footer">
+        <div class="footer-container">
+            <div class="footer-brand">
+                <a href="index.html" class="logo">Aqua<span class="highlight">Flow</span></a>
+                <p>An AI-powered swimming training platform built for athletes who demand excellence. Analyze. Optimize. Dominate.</p>
             </div>
-            
-            <div class="stats-overview">
-                <div class="stat-box">
-                    <span class="stat-label">Total Distance</span>
-                    <span id="totalDistance" class="stat-value">0 m</span>
-                </div>
-                <div class="stat-box">
-                    <span class="stat-label">Total Sessions</span>
-                    <span id="totalSessions" class="stat-value">0</span>
-                </div>
+            <div class="footer-col">
+                <h4>Platform</h4>
+                <ul>
+                    <li><a href="index.html">Home</a></li>
+                    <li><a href="motion.html">AI Motion Lab</a></li>
+                    <li><a href="coach.html">AI Coach</a></li>
+                </ul>
             </div>
-            
-            <table class="log-table">
-                <thead>
-                    <tr>
-                        <th>Date</th>
-                        <th>Distance</th>
-                    </tr>
-                </thead>
-                <tbody id="logBody">
-                    <!-- Logs injected via JS -->
-                </tbody>
-            </table>
-            <button id="clearDataBtn" class="btn btn-danger btn-small">Clear History</button>
+            <div class="footer-col">
+                <h4>Resources</h4>
+                <ul>
+                    <li><a href="#">Training Guide</a></li>
+                    <li><a href="#">Biomechanics 101</a></li>
+                    <li><a href="#">Contact Us</a></li>
+                </ul>
+            </div>
         </div>
-    </section>
-
-    <!-- Removed old Motion Lab and Floating Chat from Homepage -->
+        <div class="footer-bottom">
+            <p>&copy; 2026 AquaFlow. All rights reserved. Built with 💙 for swimmers.</p>
+        </div>
+    </footer>
 
     <!-- Script imports -->
     <script src="js/app.js"></script>

@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AquaFlow | Swimming Log</title>
+    <meta name="description" content="Log your swimming sessions and track your total volume over time.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&family=Outfit:wght@400;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/main.css">
+</head>
+<body class="tracker-page-body" style="padding-top: 100px;">
+    <!-- Dynamic Video Background -->
+    <div class="video-bg-container">
+        <video autoplay loop muted playsinline class="global-bg-video" poster="https://images.unsplash.com/photo-1519315901367-f34ff9154487?auto=format&fit=crop&q=80&w=2000">
+            <source src="https://videos.pexels.com/video-files/856973/856973-hd_1920_1080_30fps.mp4" type="video/mp4">
+            <source src="https://assets.mixkit.co/videos/preview/mixkit-swimmer-doing-the-crawl-in-a-pool-1188-large.mp4" type="video/mp4">
+            <source src="https://upload.wikimedia.org/wikipedia/commons/e/e6/Swimming_Underwater.webm" type="video/webm">
+        </video>
+        <div class="video-overlay"></div>
+    </div>
+    
+    <!-- Navigation -->
+    <nav class="navbar glass">
+        <div class="nav-container">
+            <a href="index.html" class="logo">Aqua<span class="highlight">Flow</span></a>
+            <button class="hamburger" id="hamburgerBtn" aria-label="Toggle menu">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+            <ul class="nav-links" id="navLinks">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="tracker.html" class="active">Log</a></li>
+                <li><a href="motion.html">Motion Lab</a></li>
+                <li><a href="coach.html">AI Coach</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Activity Tracker -->
+    <section id="tracker" class="features tracker-section fade-up" style="padding-top: 4rem;">
+        <div class="section-header">
+            <h2>Your Swimming <span class="highlight">Log</span></h2>
+            <p>Log your daily distances. Data is saved locally in your browser.</p>
+        </div>
+        
+        <div class="tracker-container glass-card">
+            <div class="log-input">
+                <input type="number" id="distanceInput" placeholder="Distance (meters)" min="0" step="50">
+                <button id="logBtn" class="btn btn-secondary">Save Log</button>
+            </div>
+            
+            <div class="stats-overview">
+                <div class="stat-box">
+                    <span class="stat-label">Total Distance</span>
+                    <span id="totalDistance" class="stat-value">0 m</span>
+                </div>
+                <div class="stat-box">
+                    <span class="stat-label">Total Sessions</span>
+                    <span id="totalSessions" class="stat-value">0</span>
+                </div>
+            </div>
+
+            <!-- Bar Chart -->
+            <div class="chart-container" style="margin-top: 2rem; margin-bottom: 2rem;">
+                <h4 style="margin-bottom: 1rem;">📊 Recent Sessions</h4>
+                <canvas id="swimChart"></canvas>
+            </div>
+            
+            <table class="log-table">
+                <thead>
+                    <tr>
+                        <th>Date</th>
+                        <th>Distance</th>
+                    </tr>
+                </thead>
+                <tbody id="logBody">
+                    <!-- Logs injected via JS -->
+                </tbody>
+            </table>
+            <button id="clearDataBtn" class="btn btn-danger btn-small">Clear History</button>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="site-footer" style="margin-top: 4rem;">
+        <div class="footer-bottom" style="text-align: center; padding: 2rem; border-top: 1px solid var(--glass-border);">
+            <p style="color: var(--text-muted);">&copy; 2026 AquaFlow. All rights reserved. Built with 💙 for swimmers.</p>
+        </div>
+    </footer>
+
+    <!-- Script imports -->
+    <script src="js/app.js"></script>
+</body>
+</html>

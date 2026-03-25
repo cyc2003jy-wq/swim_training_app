@@ -4,59 +4,99 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>AquaFlow | Motion Lab</title>
+    <meta name="description" content="Use AI-powered biomechanical analysis to perfect your swimming technique with video analysis.">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&family=Outfit:wght@400;700;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="css/main.css">
     
-    <!-- MediaPipe & TensorFlow.js -->
+    <!-- Markdown Parser for AI Reports -->
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    
+    <!-- MediaPipe -->
     <script src="https://cdn.jsdelivr.net/npm/@mediapipe/camera_utils/camera_utils.js" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/@mediapipe/control_utils/control_utils.js" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/@mediapipe/drawing_utils/drawing_utils.js" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/@mediapipe/pose/pose.js" crossorigin="anonymous"></script>
 </head>
 <body class="motion-page-body">
-
-    <!-- Blurry Animated Background Elements -->
-    <div class="blob blob-1"></div>
-    <div class="blob blob-2"></div>
-    <div class="blob blob-3"></div>
+    <!-- Dynamic Video Background -->
+    <div class="video-bg-container">
+        <video autoplay loop muted playsinline class="global-bg-video" poster="https://images.unsplash.com/photo-1519315901367-f34ff9154487?auto=format&fit=crop&q=80&w=2000">
+            <source src="https://videos.pexels.com/video-files/856973/856973-hd_1920_1080_30fps.mp4" type="video/mp4">
+            <source src="https://assets.mixkit.co/videos/preview/mixkit-swimmer-doing-the-crawl-in-a-pool-1188-large.mp4" type="video/mp4">
+            <source src="https://upload.wikimedia.org/wikipedia/commons/e/e6/Swimming_Underwater.webm" type="video/webm">
+        </video>
+        <div class="video-overlay"></div>
+    </div>
     
     <!-- Navigation -->
     <nav class="navbar glass">
         <div class="nav-container">
             <a href="index.html" class="logo">Aqua<span class="highlight">Flow</span></a>
-            <ul class="nav-links">
+            <button class="hamburger" id="hamburgerBtn" aria-label="Toggle menu">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+            <ul class="nav-links" id="navLinks">
                 <li><a href="index.html">Home</a></li>
+                <li><a href="tracker.html">Log</a></li>
                 <li><a href="motion.html" class="active">Motion Lab</a></li>
                 <li><a href="coach.html">AI Coach</a></li>
             </ul>
         </div>
     </nav>
 
-    <!-- AI Motion Analysis (MediaPipe) -->
+    <!-- AI Motion Analysis (Video Upload Only) -->
     <section class="biomechanics full-page-split">
-        <div class="content-side">
+        <div class="content-side fade-up">
             <h1>AI <span class="highlight">Motion Lab</span></h1>
-            <p class="hero-subtitle">Upload a video of your swim or use your webcam for real-time biomechanical analysis. Our engine tracks your skeleton, measuring EVF angles, head position, and core rotation.</p>
+            <p class="hero-subtitle">Upload a video of your swimming to get AI-powered technique analysis. Our engine tracks your skeleton, identifies your stroke, and generates a personalized coaching report.</p>
             
-            <div class="camera-controls" style="margin-top: 2rem;">
-                <button id="startWebcamBtn" class="btn btn-primary" style="margin-right: 1rem;">📷 Start Webcam</button>
-                <button id="uploadVideoBtn" class="btn btn-secondary" onclick="document.getElementById('videoUpload').click()">📁 Upload Video</button>
-                <input type="file" id="videoUpload" accept="video/mp4,video/mov" style="display: none;">
+            <div class="camera-controls" style="margin-top: 2rem; display: flex; gap: 1rem; align-items: center; flex-wrap: wrap;">
+                <button id="uploadVideoBtn" class="btn btn-primary" onclick="document.getElementById('videoUpload').click()">📁 Upload Swimming Video</button>
+                <input type="file" id="videoUpload" accept="video/*" style="display: none;">
+                <select id="strokeSelect" style="background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); color: #fff; padding: 0.6rem 1rem; border-radius: 8px; font-size: 0.95rem; cursor: pointer;">
+                    <option value="auto">🏊 Auto-Detect Stroke</option>
+                    <option value="freestyle">🏊 Freestyle (自由泳)</option>
+                    <option value="backstroke">🔄 Backstroke (仰泳)</option>
+                    <option value="breaststroke">🐸 Breaststroke (蛙泳)</option>
+                    <option value="butterfly">🦋 Butterfly (蝶泳)</option>
+                </select>
+            </div>
+
+            <div id="videoControls" style="margin-top: 1rem; display: none;">
+                <button id="replayBtn" class="btn btn-secondary btn-small">🔄 Replay</button>
+                <button id="clearVideoBtn" class="btn btn-danger btn-small" style="margin-left: 0.5rem;">✕ Clear</button>
             </div>
             
-            <div id="aiFeedbackBox" class="glass-card" style="margin-top: 2rem; border-left: 4px solid var(--accent-cyan);">
-                <h3 style="color: var(--accent-cyan); margin-bottom: 0.5rem;">Live AI Diagnostics</h3>
-                <ul id="feedbackList" class="feature-list" style="margin-top: 1rem;">
-                    <li><em>Waiting for video input...</em></li>
+            <div id="aiFeedbackBox" class="glass-card" style="margin-top: 2rem; border-left: 4px solid var(--accent-cyan); max-height: 60vh; overflow-y: auto;">
+                <h3 style="color: var(--accent-cyan); margin-bottom: 0.5rem;">🔬 AI Coaching Report</h3>
+                <ul id="feedbackList" class="feature-list" style="margin-top: 1rem; list-style: none; padding: 0;">
+                    <li><em>Upload a swimming video to begin analysis. The AI will identify your stroke and generate a personalized coaching report with specific drills.</em></li>
                 </ul>
             </div>
         </div>
         
-        <div class="visual-side glass-card large-canvas-container" style="position: relative; overflow: hidden; display: flex; align-items: center; justify-content: center; min-height: 60vh;">
+        <div class="visual-side glass-card large-canvas-container pulse-border fade-up delay-2" style="position: relative; overflow: hidden; display: flex; align-items: center; justify-content: center; min-height: 60vh;">
             <video id="inputVideo" playsinline style="display: none; max-width: 100%;"></video>
-            <canvas id="outputCanvas" width="800" height="600" style="max-width: 100%; height: auto; border-radius: var(--radius-md);"></canvas>
+            <canvas id="outputCanvas" width="800" height="600" style="max-width: 100%; height: auto; border-radius: var(--radius-md); display: none;"></canvas>
+            
+            <!-- Placeholder when no video -->
+            <div id="canvasPlaceholder" class="canvas-placeholder">
+                <svg width="120" height="120" viewBox="0 0 120 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <circle cx="60" cy="60" r="58" stroke="#00f2fe" stroke-width="2" stroke-dasharray="8 4"/>
+                    <circle cx="60" cy="30" r="8" fill="#00f2fe" opacity="0.6"/>
+                    <line x1="60" y1="38" x2="60" y2="70" stroke="#00f2fe" stroke-width="2" opacity="0.5"/>
+                    <line x1="60" y1="45" x2="40" y2="60" stroke="#00f2fe" stroke-width="2" opacity="0.5"/>
+                    <line x1="60" y1="45" x2="80" y2="60" stroke="#00f2fe" stroke-width="2" opacity="0.5"/>
+                    <line x1="60" y1="70" x2="45" y2="95" stroke="#00f2fe" stroke-width="2" opacity="0.5"/>
+                    <line x1="60" y1="70" x2="75" y2="95" stroke="#00f2fe" stroke-width="2" opacity="0.5"/>
+                </svg>
+                <p>Upload a swimming video to begin AI biomechanical analysis</p>
+            </div>
+
             <div id="loadingAnalysis" style="position: absolute; display: none; background: rgba(0,0,0,0.8); padding: 1.5rem; border-radius: var(--radius-sm); color: var(--accent-cyan); font-weight: bold; font-size: 1.2rem;">
                 Initializing Vision Models...
             </div>

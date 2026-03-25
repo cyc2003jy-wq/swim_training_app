@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>AquaFlow | AI Coach</title>
+    <meta name="description" content="Chat with your elite AI swimming coach for personalized training plans, technique advice, and nutrition guidance.">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&family=Outfit:wght@400;700;900&display=swap" rel="stylesheet">
@@ -13,18 +14,28 @@
     <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
 </head>
 <body class="chat-page-body">
-
-    <!-- Blurry Animated Background Elements -->
-    <div class="blob blob-1"></div>
-    <div class="blob blob-2"></div>
-    <div class="blob blob-3"></div>
+    <!-- Dynamic Video Background -->
+    <div class="video-bg-container">
+        <video autoplay loop muted playsinline class="global-bg-video" poster="https://images.unsplash.com/photo-1519315901367-f34ff9154487?auto=format&fit=crop&q=80&w=2000">
+            <source src="https://videos.pexels.com/video-files/856973/856973-hd_1920_1080_30fps.mp4" type="video/mp4">
+            <source src="https://assets.mixkit.co/videos/preview/mixkit-swimmer-doing-the-crawl-in-a-pool-1188-large.mp4" type="video/mp4">
+            <source src="https://upload.wikimedia.org/wikipedia/commons/e/e6/Swimming_Underwater.webm" type="video/webm">
+        </video>
+        <div class="video-overlay"></div>
+    </div>
     
     <!-- Navigation -->
     <nav class="navbar glass">
         <div class="nav-container">
             <a href="index.html" class="logo">Aqua<span class="highlight">Flow</span></a>
-            <ul class="nav-links">
+            <button class="hamburger" id="hamburgerBtn" aria-label="Toggle menu">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+            <ul class="nav-links" id="navLinks">
                 <li><a href="index.html">Home</a></li>
+                <li><a href="tracker.html">Log</a></li>
                 <li><a href="motion.html">Motion Lab</a></li>
                 <li><a href="coach.html" class="active">AI Coach</a></li>
             </ul>
@@ -34,13 +45,21 @@
     <!-- Full Screen Chat Interface -->
     <section class="fullscreen-chat">
         <div class="chat-container glass-card">
-            <div class="chat-header main-chat-header">
+            <div class="chat-header main-chat-header" style="text-align: center;">
                 <h2>🏊‍♂️ AquaFlow <span class="highlight">AI Coach</span></h2>
-                <p>Your elite 24/7 personalized swimming coach.</p>
+                <p style="color: var(--text-muted); margin-top: 0.25rem;">Your elite 24/7 personalized swimming coach.</p>
             </div>
             
             <div class="chat-messages large-chat" id="chatMessages">
                 <div class="message ai">Hi! I'm your elite AquaFlow coach. Whether you're looking for a new endurance training plan, trying to drop 2 seconds off your 50m Free, or need a dryland routine to protect your shoulders—I've got you covered. What are we working on today?</div>
+            </div>
+
+            <!-- Quick-Action Chips -->
+            <div class="quick-actions" id="quickActions">
+                <button class="quick-chip" data-msg="Give me a 2km endurance training set for intermediate level">🏊 2km Endurance Set</button>
+                <button class="quick-chip" data-msg="How can I improve my backstroke technique?">🔄 Backstroke Tips</button>
+                <button class="quick-chip" data-msg="I have shoulder pain after swimming, what should I do?">🩹 Shoulder Pain Advice</button>
+                <button class="quick-chip" data-msg="Create a 4-week periodized training plan for a 100m freestyle race">📋 4-Week Race Plan</button>
             </div>
             
             <div class="chat-input-area large-input">
