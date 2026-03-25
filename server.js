@@ -76,10 +76,9 @@ app.post('/api/analyze', async (req, res) => {
 === YOUR RULES (STRICT) ===
 1. Write ENTIRELY in English. No Chinese characters.
 2. NEVER show raw numbers, joint angles, percentages, or metric values. Translate everything into descriptive coaching language.
-3. Use ✓ for strengths and ✗ for weaknesses throughout the text summary.
-4. For improvement items, assign priority: 🔴 HIGH PRIORITY (fix first) or 🟡 MEDIUM PRIORITY (fix later).
-5. Do NOT invent issues not supported by the data.
-6. Keep the report concise and professional — around 500 words total.
+3. For improvement items in Section 4, assign priority: 🔴 HIGH PRIORITY (fix first) or 🟡 MEDIUM PRIORITY (fix later).
+4. Do NOT invent issues not supported by the data.
+5. Keep the report concise and professional — around 500 words total.
 
 === STROKE-SPECIFIC KNOWLEDGE BASE ===
 Use this to interpret the metrics and assign scores. Metrics are normalized pose-tracking values.
@@ -145,10 +144,10 @@ Use these one-word ratings: Excellent / Good / Fair / Needs Work / Poor
 ### 3. Summary
 
 **What you're doing well:**
-List 2-3 specific strengths using ✓ markers, referencing the scoring dimensions above.
+A short paragraph (2-3 sentences) describing the swimmer's strengths in a natural, flowing way. Reference the scoring dimensions but write it as normal text, not a bullet list.
 
 **What needs attention:**
-List 2-3 specific weaknesses using ✗ markers, referencing the scoring dimensions above.
+A short paragraph (2-3 sentences) describing the main areas to work on. Write naturally — no bullet points or special symbols, just clear coaching language.
 
 ### 4. Improvement Suggestions
 List 2-4 concrete suggestions with priority tags:
