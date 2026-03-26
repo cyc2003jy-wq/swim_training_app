@@ -1562,11 +1562,28 @@ select:focus, input[type="number"]:focus {
     line-height: 1.6;
 }
 
-#aiFeedbackBox h2, #aiFeedbackBox h3, #aiFeedbackBox h4, 
-.chat-messages h2, .chat-messages h3, .chat-messages h4 {
-    color: #fff;
+#aiFeedbackBox h2, .chat-messages h2 {
+    font-size: 1.4rem;
+    color: var(--accent-cyan);
     margin-top: 1.5rem;
     margin-bottom: 0.75rem;
+    font-weight: 700;
+}
+
+#aiFeedbackBox h3, .chat-messages h3 {
+    font-size: 1.2rem;
+    color: #fff;
+    margin-top: 1.25rem;
+    margin-bottom: 0.5rem;
+    font-weight: 600;
+}
+
+#aiFeedbackBox h4, .chat-messages h4 {
+    font-size: 1.05rem;
+    color: #e2e8f0;
+    margin-top: 1rem;
+    margin-bottom: 0.5rem;
+    font-weight: 600;
 }
 
 #aiFeedbackBox strong, .chat-messages strong {
