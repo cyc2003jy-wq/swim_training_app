@@ -1563,7 +1563,7 @@ select:focus, input[type="number"]:focus {
 }
 
 #aiFeedbackBox h2, .chat-messages h2 {
-    font-size: 1.4rem;
+    font-size: 1.6rem;
     color: var(--accent-cyan);
     margin-top: 1.5rem;
     margin-bottom: 0.75rem;
@@ -1571,7 +1571,7 @@ select:focus, input[type="number"]:focus {
 }
 
 #aiFeedbackBox h3, .chat-messages h3 {
-    font-size: 1.2rem;
+    font-size: 1.3rem;
     color: #fff;
     margin-top: 1.25rem;
     margin-bottom: 0.5rem;
@@ -1579,7 +1579,7 @@ select:focus, input[type="number"]:focus {
 }
 
 #aiFeedbackBox h4, .chat-messages h4 {
-    font-size: 1.05rem;
+    font-size: 1.15rem;
     color: #e2e8f0;
     margin-top: 1rem;
     margin-bottom: 0.5rem;

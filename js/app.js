@@ -1020,7 +1020,7 @@ function computeSummary() {
 
 // ============ AI REPORT GENERATION ============
 async function generateAIReport(summary) {
-    const strokeNames = { freestyle: '自由泳 (Freestyle)', backstroke: '仰泳 (Backstroke)', breaststroke: '蛙泳 (Breaststroke)', butterfly: '蝶泳 (Butterfly)' };
+    const strokeNames = { freestyle: 'Freestyle', backstroke: 'Backstroke', breaststroke: 'Breaststroke', butterfly: 'Butterfly' };
     const strokeName = strokeNames[summary.stroke] || summary.stroke;
 
     const reportBox = document.getElementById('aiFeedbackBox');
