@@ -1027,12 +1027,11 @@ function analyzeSwimmingAngles(landmarks) {
 
 // ============ DETERMINE FINAL STROKE ============
 function determineFinalStroke() {
-    if (userStrokeOverride && userStrokeOverride !== 'auto') {
+    // Always use user's manual selection
+    if (userStrokeOverride && userStrokeOverride !== '') {
         return userStrokeOverride;
     }
-    const maxVotes = Math.max(...Object.values(strokeVotes));
-    if (maxVotes === 0) return 'freestyle'; // default
-    return Object.entries(strokeVotes).find(([k, v]) => v === maxVotes)[0];
+    return 'freestyle'; // fallback default
 }
 
 // ============ COMPUTE SUMMARY STATS ============
