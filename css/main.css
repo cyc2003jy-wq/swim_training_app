@@ -981,7 +981,7 @@ select:focus, input[type="number"]:focus {
 
 .chat-container {
     width: 100%;
-    max-width: 1200px;
+    max-width: 1400px;
     height: calc(100vh - 140px);
     display: flex;
     flex-direction: column;
