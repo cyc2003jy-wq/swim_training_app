@@ -1026,7 +1026,7 @@ select:focus, input[type="number"]:focus {
 }
 
 .large-canvas-container {
-    height: 70vh;
+    height: 78vh;
     border-radius: var(--radius-lg);
     border: 1px solid rgba(0, 242, 254, 0.4);
     box-shadow: inset 0 0 40px rgba(0, 242, 254, 0.1), 0 0 50px rgba(0, 242, 254, 0.2);
