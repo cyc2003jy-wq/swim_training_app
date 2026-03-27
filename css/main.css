@@ -636,7 +636,7 @@ select:focus, input[type="number"]:focus {
 
 /* Tracker Log */
 .tracker-section {
-    max-width: 900px;
+    max-width: 1100px;
     margin: 0 auto;
 }
 
