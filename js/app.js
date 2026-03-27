@@ -842,27 +842,42 @@ function analyzeSwimmingAngles(landmarks) {
     analysisReport.framesAnalyzed++;
     const m = analysisReport.metrics;
 
-    // ============ STROKE CLASSIFICATION (Enhanced v2.1) ============
+    // ============ STROKE CLASSIFICATION (Enhanced v3.0 — High Accuracy) ============
     const shoulderMidY = (leftShoulder.y + rightShoulder.y) / 2;
     const hipMidY_cls = (leftHip.visibility > 0.3 && rightHip.visibility > 0.3) ? (leftHip.y + rightHip.y) / 2 : shoulderMidY + 0.2;
 
-    // Face orientation (more robust with ear fallback)
+    // --- Face orientation (stabilized with confidence check) ---
+    // In MediaPipe normalized coords, lower Y = higher position on screen.
+    // Backstroke: nose is clearly ABOVE shoulders (lower Y value).
+    // Freestyle: nose is below or at shoulder level.
     const earMidY = (leftEar.visibility > 0.3 && rightEar.visibility > 0.3) ? (leftEar.y + rightEar.y) / 2 : nose.y;
-    const isFaceUp = nose.visibility > 0.4 && (nose.y < shoulderMidY - 0.06 || earMidY < shoulderMidY - 0.04);
-    const isFaceDown = nose.visibility > 0.4 && nose.y >= shoulderMidY - 0.01;
 
-    // Arm positions
-    const leftArmUp = leftWrist.visibility > 0.3 && leftWrist.y < leftShoulder.y;
-    const rightArmUp = rightWrist.visibility > 0.3 && rightWrist.y < rightShoulder.y;
+    // Use STRICT thresholds to reduce false backstroke detections.
+    // Require nose significantly above shoulders AND ears above shoulders.
+    const noseAboveShoulders = nose.visibility > 0.5 && nose.y < shoulderMidY - 0.08;
+    const earsAboveShoulders = earMidY < shoulderMidY - 0.05;
+    const isFaceUp = noseAboveShoulders && earsAboveShoulders;
+
+    // Face down: nose at or below shoulder line (common in freestyle, breaststroke, butterfly)
+    const isFaceDown = nose.visibility > 0.4 && nose.y >= shoulderMidY - 0.03;
+    // Face neutral: nose slightly above shoulders (breathing in freestyle, or breaststroke breath)
+    const isFaceNeutral = !isFaceUp && !isFaceDown;
+
+    // --- Arm positions ---
+    const leftArmUp = leftWrist.visibility > 0.3 && leftWrist.y < leftShoulder.y - 0.03;
+    const rightArmUp = rightWrist.visibility > 0.3 && rightWrist.y < rightShoulder.y - 0.03;
     const bothArmsUp = leftArmUp && rightArmUp;
     const oneArmUp = (leftArmUp && !rightArmUp) || (!leftArmUp && rightArmUp);
     const neitherArmUp = !leftArmUp && !rightArmUp;
 
-    // Arm symmetry (wrists at similar Y)
+    // Arm symmetry: wrists at similar Y (symmetric strokes: breaststroke, butterfly)
     const wristYDiff = Math.abs((leftWrist.y || 0) - (rightWrist.y || 0));
     const armsSymmetric = wristYDiff < 0.07;
 
-    // Leg metrics
+    // Arms asymmetric = strong signal for freestyle or backstroke
+    const armsAsymmetric = wristYDiff > 0.10;
+
+    // --- Leg metrics ---
     let kneeWidth = 0, ankleWidth = 0;
     let shoulderWidth = Math.abs(leftShoulder.x - rightShoulder.x);
     if (leftKnee.visibility > 0.3 && rightKnee.visibility > 0.3) {
@@ -872,44 +887,77 @@ function analyzeSwimmingAngles(landmarks) {
         ankleWidth = Math.abs(leftAnkle.x - rightAnkle.x);
     }
 
-    // Kick pattern: breaststroke has wide knees + narrow ankles at kick end
+    // Breaststroke kick: knees spread wide
     const breaststrokeKickPattern = kneeWidth > shoulderWidth * 0.7 && kneeWidth > 0;
-    // Flutter kick: ankles close together, knees close
+    // Flutter kick: narrow knees/ankles (freestyle, backstroke)
     const flutterKickPattern = kneeWidth > 0 && kneeWidth < shoulderWidth * 0.6;
 
-    // === VOTING with weighted signals ===
-    // Backstroke: face up is the strongest single signal
+    // --- Body undulation: butterfly key signal ---
+    let currentUndulation = 0;
+    if (leftHip.visibility > 0.4 && rightHip.visibility > 0.4) {
+        const hipMidY_und = (leftHip.y + rightHip.y) / 2;
+        currentUndulation = Math.abs(hipMidY_und - shoulderMidY);
+    }
+    const significantUndulation = currentUndulation > 0.12;
+
+    // === WEIGHTED VOTING WITH PENALTIES (v3.0) ===
+
+    // --- BACKSTROKE: face up is the primary signal ---
     if (isFaceUp) {
-        strokeVotes.backstroke += 3;
-        if (oneArmUp) strokeVotes.backstroke += 1;
+        strokeVotes.backstroke += 5;  // Very strong signal
+        if (oneArmUp && armsAsymmetric) strokeVotes.backstroke += 2;
         if (flutterKickPattern) strokeVotes.backstroke += 1;
+        // Penalize everything else when face is clearly up
+        strokeVotes.freestyle -= 2;
+        strokeVotes.breaststroke -= 2;
+        strokeVotes.butterfly -= 2;
     }
 
-    // Freestyle: face down + alternating arms + flutter kick
-    if (isFaceDown && oneArmUp) {
-        strokeVotes.freestyle += 3;
-        if (flutterKickPattern) strokeVotes.freestyle += 1;
+    // --- FREESTYLE: face down + ONE arm up (alternating) + flutter kick ---
+    if (isFaceDown && oneArmUp && armsAsymmetric) {
+        strokeVotes.freestyle += 4;
+        if (flutterKickPattern) strokeVotes.freestyle += 2;
+        // Penalize symmetric strokes
+        strokeVotes.breaststroke -= 1;
+        strokeVotes.butterfly -= 1;
+    }
+    // Freestyle with neutral face (breathing moment): still alternating arms
+    if (isFaceNeutral && oneArmUp && armsAsymmetric) {
+        strokeVotes.freestyle += 2;
+    }
+    // Penalty: if both arms are up, it's NOT freestyle
+    if (bothArmsUp) {
+        strokeVotes.freestyle -= 2;
     }
 
-    // Breaststroke: face down + symmetric arms + wide knee kick
-    if (isFaceDown && armsSymmetric && breaststrokeKickPattern) {
-        strokeVotes.breaststroke += 3;
+    // --- BREASTSTROKE: face down/neutral + symmetric arms + wide knee kick ---
+    if ((isFaceDown || isFaceNeutral) && armsSymmetric && breaststrokeKickPattern) {
+        strokeVotes.breaststroke += 5;
+        strokeVotes.freestyle -= 1;
     } else if (breaststrokeKickPattern && armsSymmetric) {
-        strokeVotes.breaststroke += 2;
-    }
-
-    // Butterfly: face down + both arms up simultaneously + narrow kick
-    if (isFaceDown && bothArmsUp && armsSymmetric && !breaststrokeKickPattern) {
-        strokeVotes.butterfly += 3;
-    } else if (bothArmsUp && armsSymmetric && isFaceDown) {
-        strokeVotes.butterfly += 1;
-    }
-
-    // Breaststroke glide phase: both arms forward, neither up, symmetric
-    if (neitherArmUp && armsSymmetric && isFaceDown) {
+        strokeVotes.breaststroke += 3;
+    } else if (breaststrokeKickPattern) {
         strokeVotes.breaststroke += 1;
-        // Track glide frames
+    }
+    // Breaststroke glide: arms forward, neither up, symmetric
+    if (neitherArmUp && armsSymmetric && isFaceDown) {
+        strokeVotes.breaststroke += 2;
         m.glideFrames++;
+    }
+
+    // --- BUTTERFLY: face down + both arms up simultaneously + narrow kick + undulation ---
+    if (isFaceDown && bothArmsUp && armsSymmetric && !breaststrokeKickPattern) {
+        strokeVotes.butterfly += 4;
+        if (significantUndulation) strokeVotes.butterfly += 2;
+        strokeVotes.breaststroke -= 1;
+    }
+    if (significantUndulation && bothArmsUp) {
+        strokeVotes.butterfly += 2;
+        strokeVotes.breaststroke -= 1;
+    }
+    // Butterfly penalty: if only one arm is up, it's probably not butterfly
+    if (oneArmUp && !bothArmsUp) {
+        strokeVotes.butterfly -= 1;
     }
 
     // ============ COLLECT UNIVERSAL METRICS ============
