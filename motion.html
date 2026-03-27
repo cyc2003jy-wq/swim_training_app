@@ -57,13 +57,16 @@
             <div class="camera-controls" style="margin-top: 2rem; display: flex; gap: 1rem; align-items: center; flex-wrap: wrap;">
                 <button id="uploadVideoBtn" class="btn btn-primary" onclick="document.getElementById('videoUpload').click()">📁 Upload Swimming Video</button>
                 <input type="file" id="videoUpload" accept="video/*" style="display: none;">
-                <select id="strokeSelect" style="background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); color: #fff; padding: 0.6rem 1rem; border-radius: 8px; font-size: 0.95rem; cursor: pointer;">
-                    <option value="auto">▸ Auto-Detect Stroke</option>
-                    <option value="freestyle">▸ Freestyle</option>
-                    <option value="backstroke">▸ Backstroke</option>
-                    <option value="breaststroke">▸ Breaststroke</option>
-                    <option value="butterfly">▸ Butterfly</option>
-                </select>
+                <div style="position: relative; display: inline-block;">
+                    <select id="strokeSelect" style="background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.15); color: #fff; padding: 0.6rem 2.5rem 0.6rem 1rem; border-radius: 8px; font-size: 0.95rem; cursor: pointer; appearance: none; -webkit-appearance: none; -moz-appearance: none;">
+                        <option value="auto">▸ Auto-Detect Stroke</option>
+                        <option value="freestyle">▸ Freestyle</option>
+                        <option value="backstroke">▸ Backstroke</option>
+                        <option value="breaststroke">▸ Breaststroke</option>
+                        <option value="butterfly">▸ Butterfly</option>
+                    </select>
+                    <span style="position: absolute; right: 10px; top: 50%; transform: translateY(-50%); pointer-events: none; color: rgba(255,255,255,0.5); font-size: 0.7rem;">▼</span>
+                </div>
             </div>
 
             <div id="videoControls" style="margin-top: 1rem; display: none;">
