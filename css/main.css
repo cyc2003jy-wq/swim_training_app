@@ -1418,7 +1418,7 @@ select:focus, input[type="number"]:focus {
     gap: 3rem;
     padding: 120px 2rem 4rem 2rem;
     min-height: 100vh;
-    align-items: start;
+    align-items: stretch;
     max-width: var(--container-max);
 }
 
@@ -1439,8 +1439,14 @@ select:focus, input[type="number"]:focus {
 }
 
 .content-side {
-    position: sticky;
-    top: 120px;
+    display: flex;
+    flex-direction: column;
+}
+
+.content-side #aiFeedbackBox {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
 }
 
 .canvas-placeholder {
