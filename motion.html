@@ -57,7 +57,9 @@
             <div class="camera-controls" style="margin-top: 2rem; display: flex; gap: 1rem; align-items: center; flex-wrap: wrap;">
                 <button id="uploadVideoBtn" class="btn btn-primary" onclick="document.getElementById('videoUpload').click()">📁 Upload Swimming Video</button>
                 <input type="file" id="videoUpload" accept="video/*" style="display: none;">
-                <div style="position: relative; display: inline-block;">
+                <div style="position: relative; display: inline-flex; flex-direction: column; gap: 0.4rem;">
+                    <label for="strokeSelect" style="color: var(--text-muted); font-size: 0.8rem; font-weight: 600; letter-spacing: 0.5px; text-transform: uppercase;">Stroke Selection</label>
+                    <div style="position: relative; display: inline-block;">
                     <select id="strokeSelect" style="background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.15); color: #fff; padding: 0.6rem 2.5rem 0.6rem 1rem; border-radius: 8px; font-size: 0.95rem; cursor: pointer; appearance: none; -webkit-appearance: none; -moz-appearance: none;">
                         <option value="auto">▸ Auto-Detect Stroke</option>
                         <option value="freestyle">▸ Freestyle</option>
@@ -66,8 +68,8 @@
                         <option value="butterfly">▸ Butterfly</option>
                     </select>
                     <span style="position: absolute; right: 10px; top: 50%; transform: translateY(-50%); pointer-events: none; color: rgba(255,255,255,0.5); font-size: 0.7rem;">▼</span>
+                    </div>
                 </div>
-            </div>
 
             <div id="videoControls" style="margin-top: 1rem; display: none;">
                 <button id="replayBtn" class="btn btn-secondary btn-small">🔄 Replay</button>
