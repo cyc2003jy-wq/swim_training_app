@@ -1422,6 +1422,22 @@ select:focus, input[type="number"]:focus {
     max-width: var(--container-max);
 }
 
+/* Ensure biomechanics full-page-split keeps 2-column grid (override .biomechanics.split-section) */
+.biomechanics.full-page-split {
+    display: grid !important;
+    grid-template-columns: 1fr 1fr !important;
+    max-width: none;
+    width: 100%;
+    margin: 0 auto;
+    padding: 120px 2rem 4rem 2rem;
+}
+
+@media (max-width: 768px) {
+    .biomechanics.full-page-split {
+        grid-template-columns: 1fr !important;
+    }
+}
+
 .content-side {
     position: sticky;
     top: 120px;
