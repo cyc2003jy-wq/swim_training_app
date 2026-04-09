@@ -9,10 +9,10 @@ document.addEventListener('DOMContentLoaded', () => {
     
     window.addEventListener('scroll', () => {
         if (window.scrollY > 50) {
-            navbar.style.background = 'rgba(10, 17, 40, 0.8)';
-            navbar.style.boxShadow = '0 4px 30px rgba(0, 0, 0, 0.5)';
+            navbar.style.background = 'rgba(255, 255, 255, 0.98)';
+            navbar.style.boxShadow = '0 4px 20px rgba(37, 99, 235, 0.1)';
         } else {
-            navbar.style.background = 'rgba(10, 17, 40, 0.45)';
+            navbar.style.background = 'rgba(255, 255, 255, 0.92)';
             navbar.style.boxShadow = 'none';
         }
     });
