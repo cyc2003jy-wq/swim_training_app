@@ -743,8 +743,6 @@ pose.onResults((results) => {
                       
         // Biomechanical Analysis Engine
         analyzeSwimmingAngles(results.poseLandmarks);
-    } else {
-        updateFeedback("No person detected. Please make sure your full body is in frame.", "warning");
     }
     canvasCtx.restore();
 });
@@ -1230,8 +1228,10 @@ if (startAnalysisBtn) {
         }
         
         if (loadingAnalysis) loadingAnalysis.style.display = 'block';
+        resetAnalysisReport();
+        videoElement.currentTime = 0;
         videoElement.play().then(() => {
-            updateFeedback("⚙️ Analyzing video in real-time. Full report will instantly generate when playback completes.", "neutral");
+            updateFeedback("⏳ Video analysis in progress... The coaching report will be generated once playback completes.", "neutral");
             processUploadedVideo();
         }).catch(err => {
             console.error("Video play error:", err);
