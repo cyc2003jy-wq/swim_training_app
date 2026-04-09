@@ -1203,6 +1203,31 @@ async function processUploadedVideo() {
 }
 
 // 5. Video Upload Handler
+const uploadVideoBtn = document.getElementById('uploadVideoBtn');
+const strokeAlert = document.getElementById('strokeAlert');
+
+if (uploadVideoBtn) {
+    uploadVideoBtn.addEventListener('click', () => {
+        const strokeSelectEl = document.getElementById('strokeSelect');
+        if (!strokeSelectEl || !strokeSelectEl.value || strokeSelectEl.value === "") {
+            if (strokeAlert) {
+                strokeAlert.style.display = 'block';
+                // Trigger reflow
+                void strokeAlert.offsetWidth;
+                strokeAlert.style.opacity = '1';
+                setTimeout(() => {
+                    strokeAlert.style.opacity = '0';
+                    setTimeout(() => { strokeAlert.style.display = 'none'; }, 300);
+                }, 3000);
+            }
+            return;
+        }
+        if (videoUpload) {
+            videoUpload.click();
+        }
+    });
+}
+
 if (videoUpload) {
     videoUpload.addEventListener('change', (e) => {
         const file = e.target.files[0];

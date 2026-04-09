@@ -55,7 +55,13 @@
             <p class="hero-subtitle">Upload a video of your swimming to get AI-powered technique analysis. Our engine tracks your skeleton, identifies your stroke, and generates a personalized coaching report.</p>
             
             <div class="camera-controls" style="margin-top: 2rem; display: flex; gap: 1rem; align-items: flex-end; flex-wrap: wrap;">
-                <button id="uploadVideoBtn" class="btn btn-primary" onclick="document.getElementById('videoUpload').click()">📁 Upload Swimming Video</button>
+                <div style="position: relative;">
+                    <button id="uploadVideoBtn" class="btn btn-primary">📁 Upload Swimming Video</button>
+                    <div id="strokeAlert" style="display: none; position: absolute; bottom: 100%; left: 0; margin-bottom: 8px; background: #ff4a4a; color: white; padding: 6px 12px; border-radius: 6px; font-size: 0.85rem; font-weight: bold; box-shadow: 0 4px 12px rgba(255,74,74,0.3); white-space: nowrap; z-index: 10; opacity: 0; transition: opacity 0.3s ease;">
+                        ⚠️ 请先选择泳姿，再上传视频！
+                        <div style="position: absolute; bottom: -4px; left: 20px; width: 8px; height: 8px; background: #ff4a4a; transform: rotate(45deg);"></div>
+                    </div>
+                </div>
                 <input type="file" id="videoUpload" accept="video/*" style="display: none;">
                 <div style="position: relative; display: inline-flex; flex-direction: column; gap: 0.4rem;">
                     <label for="strokeSelect" style="color: var(--text-muted); font-size: 0.8rem; font-weight: 600; letter-spacing: 0.5px; text-transform: uppercase;">Stroke Selection</label>
