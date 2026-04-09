@@ -1096,7 +1096,7 @@ async function generateAIReport(summary) {
 
         feedbackList.innerHTML = '';
         const reportDiv = document.createElement('div');
-        reportDiv.style.cssText = 'color: #e2e8f0; line-height: 1.8; font-size: 1rem;';
+        reportDiv.style.cssText = 'color: var(--text-main); line-height: 1.8; font-size: 1rem;';
         feedbackList.appendChild(reportDiv);
 
         while (true) {
@@ -1169,12 +1169,12 @@ async function showFinalReport() {
 
 function addFeedbackItem(title, text, type) {
     const li = document.createElement('li');
-    let color = 'white';
+    let color = 'var(--text-main)';
     if (type === 'error') color = '#ff4a4a';
-    if (type === 'success') color = '#00f2fe';
+    if (type === 'success') color = '#0ea5e9';
     if (type === 'warning') color = '#f39c12';
 
-    li.innerHTML = `<strong style="color: ${color}">${title}</strong><br><span style="color: #a0aec0; font-size: 0.95rem; display: block; margin-top: 0.3rem;">${text}</span>`;
+    li.innerHTML = `<strong style="color: ${color}">${title}</strong><br><span style="color: var(--text-muted); font-size: 0.95rem; display: block; margin-top: 0.3rem;">${text}</span>`;
     li.style.marginBottom = '1rem';
     feedbackList.appendChild(li);
 }
