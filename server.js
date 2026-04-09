@@ -14,6 +14,11 @@ app.use(express.json());
 // Assuming index.html, css/, and js/ are in the same directory as server.js
 app.use(express.static(path.join(__dirname)));
 
+// Health check endpoint for Render
+app.get('/healthz', (req, res) => {
+    res.status(200).send('OK');
+});
+
 // DeepSeek API Endpoint
 app.post('/api/chat', async (req, res) => {
     try {
