@@ -981,16 +981,19 @@ select:focus, input[type="number"]:focus {
     display: flex;
     align-items: center;
     justify-content: center;
-    padding: 90px 1rem 1rem 1rem;
+    padding: 80px 0 0 0;
 }
 
 .chat-container {
     width: 100%;
     max-width: 100%;
-    height: calc(100vh - 100px);
+    height: calc(100vh - 80px);
     display: flex;
     flex-direction: column;
     background: var(--bg-surface);
+    border-radius: 0;
+    border: none;
+    box-shadow: none;
 }
 
 .main-chat-header {
