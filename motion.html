@@ -20,13 +20,8 @@
     <script src="https://cdn.jsdelivr.net/npm/@mediapipe/pose/pose.js" crossorigin="anonymous"></script>
 </head>
 <body class="motion-page-body">
-    <!-- Dynamic Video Background -->
+    <!-- Light gradient background -->
     <div class="video-bg-container">
-        <video autoplay loop muted playsinline class="global-bg-video" poster="https://images.unsplash.com/photo-1519315901367-f34ff9154487?auto=format&fit=crop&q=80&w=2000">
-            <source src="https://videos.pexels.com/video-files/856973/856973-hd_1920_1080_30fps.mp4" type="video/mp4">
-            <source src="https://assets.mixkit.co/videos/preview/mixkit-swimmer-doing-the-crawl-in-a-pool-1188-large.mp4" type="video/mp4">
-            <source src="https://upload.wikimedia.org/wikipedia/commons/e/e6/Swimming_Underwater.webm" type="video/webm">
-        </video>
         <div class="video-overlay"></div>
     </div>
     
@@ -61,22 +56,22 @@
                 <div style="position: relative; display: inline-flex; flex-direction: column; gap: 0.4rem;">
                     <label for="strokeSelect" style="color: var(--text-muted); font-size: 0.8rem; font-weight: 600; letter-spacing: 0.5px; text-transform: uppercase;">Stroke Selection</label>
                     <div style="position: relative; display: inline-block;">
-                    <select id="strokeSelect" style="background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.15); color: #fff; padding: 0.6rem 2.5rem 0.6rem 1rem; border-radius: 8px; font-size: 0.95rem; cursor: pointer; appearance: none; -webkit-appearance: none; -moz-appearance: none; min-width: 240px;">
+                    <select id="strokeSelect" style="background: var(--bg-surface); border: 1px solid var(--glass-border); color: var(--text-main); padding: 0.6rem 2.5rem 0.6rem 1rem; border-radius: 8px; font-size: 0.95rem; cursor: pointer; appearance: none; -webkit-appearance: none; -moz-appearance: none; min-width: 240px;">
                         <option value="" disabled selected>▸ Select Stroke</option>
                         <option value="freestyle">▸ Freestyle</option>
                         <option value="backstroke">▸ Backstroke</option>
                         <option value="breaststroke">▸ Breaststroke</option>
                         <option value="butterfly">▸ Butterfly</option>
                     </select>
-                    <span style="position: absolute; right: 10px; top: 50%; transform: translateY(-50%); pointer-events: none; color: rgba(255,255,255,0.5); font-size: 0.7rem;">▼</span>
+                    <span style="position: absolute; right: 10px; top: 50%; transform: translateY(-50%); pointer-events: none; color: var(--text-muted); font-size: 0.7rem;">▼</span>
                     </div>
                 </div>
 
                 <div style="position: relative;">
-                    <button id="startAnalysisBtn" class="btn btn-secondary" style="background: #00f2fe; color: #0a1128; border: none; font-weight: bold; cursor: pointer;">▶ Start Analysis</button>
-                    <div id="startAlert" style="display: none; position: absolute; bottom: 100%; left: 0; margin-bottom: 8px; background: #ff4a4a; color: white; padding: 6px 12px; border-radius: 6px; font-size: 0.85rem; font-weight: bold; box-shadow: 0 4px 16px rgba(255,74,74,0.5); white-space: nowrap; z-index: 9999; opacity: 0; transition: opacity 0.3s ease;">
+                    <button id="startAnalysisBtn" class="btn btn-primary" style="background: var(--gradient-primary); color: #fff; border: none; font-weight: bold; cursor: pointer;">▶ Start Analysis</button>
+                    <div id="startAlert" style="display: none; position: absolute; bottom: 100%; left: 0; margin-bottom: 8px; background: #ef4444; color: white; padding: 6px 12px; border-radius: 6px; font-size: 0.85rem; font-weight: bold; box-shadow: 0 4px 16px rgba(239,68,68,0.3); white-space: nowrap; z-index: 9999; opacity: 0; transition: opacity 0.3s ease;">
                         ⚠️ Please upload a video and select a stroke!
-                        <div style="position: absolute; bottom: -4px; left: 20px; width: 8px; height: 8px; background: #ff4a4a; transform: rotate(45deg);"></div>
+                        <div style="position: absolute; bottom: -4px; left: 20px; width: 8px; height: 8px; background: #ef4444; transform: rotate(45deg);"></div>
                     </div>
                 </div>
             </div>
@@ -85,8 +80,8 @@
                 <button id="clearVideoBtn" class="btn btn-danger btn-small" style="margin-left: 0.5rem;">✕ Clear</button>
             </div>
             
-            <div id="aiFeedbackBox" class="glass-card" style="margin-top: 2rem; border-left: 4px solid var(--accent-cyan); max-height: 60vh; overflow-y: auto;">
-                <h3 style="color: var(--accent-cyan); margin-bottom: 0.5rem;">🔬 AI Coaching Report</h3>
+            <div id="aiFeedbackBox" class="glass-card" style="margin-top: 2rem; border-left: 4px solid var(--accent-blue); max-height: 60vh; overflow-y: auto;">
+                <h3 style="color: var(--accent-blue); margin-bottom: 0.5rem;">🔬 AI Coaching Report</h3>
                 <ul id="feedbackList" class="feature-list" style="margin-top: 1rem; list-style: none; padding: 0;">
                     <li><em>Upload a swimming video to begin analysis. The AI will identify your stroke and generate a personalized coaching report with specific drills.</em></li>
                 </ul>
@@ -100,18 +95,18 @@
             <!-- Placeholder when no video -->
             <div id="canvasPlaceholder" class="canvas-placeholder">
                 <svg width="120" height="120" viewBox="0 0 120 120" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <circle cx="60" cy="60" r="58" stroke="#00f2fe" stroke-width="2" stroke-dasharray="8 4"/>
-                    <circle cx="60" cy="30" r="8" fill="#00f2fe" opacity="0.6"/>
-                    <line x1="60" y1="38" x2="60" y2="70" stroke="#00f2fe" stroke-width="2" opacity="0.5"/>
-                    <line x1="60" y1="45" x2="40" y2="60" stroke="#00f2fe" stroke-width="2" opacity="0.5"/>
-                    <line x1="60" y1="45" x2="80" y2="60" stroke="#00f2fe" stroke-width="2" opacity="0.5"/>
-                    <line x1="60" y1="70" x2="45" y2="95" stroke="#00f2fe" stroke-width="2" opacity="0.5"/>
-                    <line x1="60" y1="70" x2="75" y2="95" stroke="#00f2fe" stroke-width="2" opacity="0.5"/>
+                    <circle cx="60" cy="60" r="58" stroke="#2563eb" stroke-width="2" stroke-dasharray="8 4"/>
+                    <circle cx="60" cy="30" r="8" fill="#2563eb" opacity="0.5"/>
+                    <line x1="60" y1="38" x2="60" y2="70" stroke="#2563eb" stroke-width="2" opacity="0.4"/>
+                    <line x1="60" y1="45" x2="40" y2="60" stroke="#2563eb" stroke-width="2" opacity="0.4"/>
+                    <line x1="60" y1="45" x2="80" y2="60" stroke="#2563eb" stroke-width="2" opacity="0.4"/>
+                    <line x1="60" y1="70" x2="45" y2="95" stroke="#2563eb" stroke-width="2" opacity="0.4"/>
+                    <line x1="60" y1="70" x2="75" y2="95" stroke="#2563eb" stroke-width="2" opacity="0.4"/>
                 </svg>
                 <p>Upload a swimming video to begin AI biomechanical analysis</p>
             </div>
 
-            <div id="loadingAnalysis" style="position: absolute; display: none; background: rgba(0,0,0,0.8); padding: 1.5rem; border-radius: var(--radius-sm); color: var(--accent-cyan); font-weight: bold; font-size: 1.2rem;">
+            <div id="loadingAnalysis" style="position: absolute; display: none; background: rgba(255,255,255,0.92); padding: 1.5rem; border-radius: 12px; border: 1px solid var(--glass-border); color: var(--accent-blue); font-weight: bold; font-size: 1.2rem; box-shadow: 0 8px 24px rgba(37,99,235,0.1);">
                 Initializing Vision Models...
             </div>
         </div>

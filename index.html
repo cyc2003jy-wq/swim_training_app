@@ -17,13 +17,8 @@
     <script src="https://cdn.jsdelivr.net/npm/@mediapipe/pose/pose.js" crossorigin="anonymous"></script>
 </head>
 <body>
-    <!-- Dynamic Video Background -->
+    <!-- Light gradient background -->
     <div class="video-bg-container">
-        <video autoplay loop muted playsinline class="global-bg-video" poster="https://images.unsplash.com/photo-1519315901367-f34ff9154487?auto=format&fit=crop&q=80&w=2000">
-            <source src="https://videos.pexels.com/video-files/856973/856973-hd_1920_1080_30fps.mp4" type="video/mp4">
-            <source src="https://assets.mixkit.co/videos/preview/mixkit-swimmer-doing-the-crawl-in-a-pool-1188-large.mp4" type="video/mp4">
-            <source src="https://upload.wikimedia.org/wikipedia/commons/e/e6/Swimming_Underwater.webm" type="video/webm">
-        </video>
         <div class="video-overlay"></div>
     </div>
     
@@ -57,20 +52,20 @@
         </div>
         <div class="hero-visual fade-up delay-2" style="perspective: 1200px;">
             <!-- Main AI HUD Card -->
-            <div class="glass-card hero-card" style="transform: rotateY(-15deg) rotateX(10deg); box-shadow: 0 30px 60px rgba(0, 242, 254, 0.15), inset 0 0 20px rgba(0, 242, 254, 0.1); border: 1px solid rgba(0,242,254,0.3); background: rgba(5, 8, 20, 0.7);">
-                <div class="card-header" style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid rgba(0,242,254,0.1); padding-bottom: 1rem; margin-bottom: 1.5rem;">
-                    <span class="badge" style="background: var(--gradient-primary); color: white; box-shadow: 0 0 15px rgba(0, 242, 254, 0.4); border:none;"><i class="pulse-dot"></i> AI Analysis</span>
-                    <span style="font-family: monospace; color: var(--accent-cyan); letter-spacing: 2px; font-size: 0.85rem;">READY</span>
+            <div class="glass-card hero-card" style="transform: rotateY(-15deg) rotateX(10deg); box-shadow: 0 20px 50px rgba(37, 99, 235, 0.12); border: 1px solid rgba(37,99,235,0.2);">
+                <div class="card-header" style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid rgba(37,99,235,0.1); padding-bottom: 1rem; margin-bottom: 1.5rem;">
+                    <span class="badge" style="background: var(--gradient-primary); color: white; border:none;"><i class="pulse-dot"></i> AI Analysis</span>
+                    <span style="font-family: monospace; color: var(--accent-blue); letter-spacing: 2px; font-size: 0.85rem;">READY</span>
                 </div>
                 
                 <!-- Circular Metric -->
                 <div style="display: flex; align-items: center; gap: 1.5rem; margin-bottom: 2rem;">
-                    <div style="position: relative; width: 80px; height: 80px; border-radius: 50%; background: conic-gradient(var(--accent-cyan) 85%, transparent 0); display: flex; align-items: center; justify-content: center; box-shadow: 0 0 20px rgba(0,242,254,0.3);">
-                        <div style="width: 70px; height: 70px; background: var(--bg-surface); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 900; font-size: 1.5rem; color: #fff;">85</div>
+                    <div style="position: relative; width: 80px; height: 80px; border-radius: 50%; background: conic-gradient(var(--accent-blue) 85%, #e2e8f0 0); display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 16px rgba(37,99,235,0.15);">
+                        <div style="width: 70px; height: 70px; background: var(--bg-surface); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 900; font-size: 1.5rem; color: var(--text-main);">85</div>
                     </div>
                     <div>
-                        <h4 style="margin: 0; color: #fff; font-size: 1.1rem; text-transform: uppercase;">Technique Score</h4>
-                        <div style="color: var(--accent-cyan); font-size: 0.9rem; font-family: monospace; margin-top: 0.3rem;">✓ EXCELLENT</div>
+                        <h4 style="margin: 0; color: var(--text-main); font-size: 1.1rem; text-transform: uppercase;">Technique Score</h4>
+                        <div style="color: var(--accent-blue); font-size: 0.9rem; font-family: monospace; margin-top: 0.3rem;">✓ EXCELLENT</div>
                     </div>
                 </div>
 
@@ -78,30 +73,30 @@
                 <div class="workout-stats" style="flex-direction: column; gap: 1.2rem; border: none; padding: 0; margin: 0;">
                     <div>
                         <div style="display: flex; justify-content: space-between; font-size: 0.8rem; font-family: monospace; color: var(--text-muted); margin-bottom: 0.5rem;">
-                            <span>STROKE EFFICIENCY</span> <span style="color: var(--accent-cyan);">92%</span>
+                            <span>STROKE EFFICIENCY</span> <span style="color: var(--accent-blue);">92%</span>
                         </div>
-                        <div style="width: 100%; height: 6px; background: rgba(255,255,255,0.05); border-radius: 10px; overflow: hidden;">
-                            <div style="width: 92%; height: 100%; background: var(--gradient-primary); box-shadow: 0 0 10px var(--accent-cyan);"></div>
+                        <div style="width: 100%; height: 6px; background: #e2e8f0; border-radius: 10px; overflow: hidden;">
+                            <div style="width: 92%; height: 100%; background: var(--gradient-primary);"></div>
                         </div>
                     </div>
                     <div>
                         <div style="display: flex; justify-content: space-between; font-size: 0.8rem; font-family: monospace; color: var(--text-muted); margin-bottom: 0.5rem;">
-                            <span>BODY POSITION</span> <span style="color: var(--accent-cyan);">88%</span>
+                            <span>BODY POSITION</span> <span style="color: var(--accent-blue);">88%</span>
                         </div>
-                        <div style="width: 100%; height: 6px; background: rgba(255,255,255,0.05); border-radius: 10px; overflow: hidden;">
-                            <div style="width: 88%; height: 100%; background: var(--gradient-primary); box-shadow: 0 0 10px var(--accent-cyan);"></div>
+                        <div style="width: 100%; height: 6px; background: #e2e8f0; border-radius: 10px; overflow: hidden;">
+                            <div style="width: 88%; height: 100%; background: var(--gradient-primary);"></div>
                         </div>
                     </div>
                 </div>
             </div>
             
             <!-- Side Tip Card -->
-             <div class="glass-card hero-card side-card" style="transform: rotateY(-15deg) rotateX(10deg) translateZ(60px); background: rgba(5,8,20,0.85); border-color: rgba(255,0,85,0.3); box-shadow: 0 20px 50px rgba(255,0,85,0.15);">
-                 <div class="card-header" style="border-bottom: 1px solid rgba(255,0,85,0.1); padding-bottom: 0.8rem; margin-bottom: 1rem;">
-                    <span class="badge badge-accent" style="box-shadow: 0 0 10px rgba(255,0,85,0.3); background: rgba(255,0,85,0.15); color: #ff0055;"><span style="color:#ff0055; margin-right: 4px;">▲</span> Improvement Tip</span>
+             <div class="glass-card hero-card side-card" style="transform: rotateY(-15deg) rotateX(10deg) translateZ(60px); border-color: rgba(239,68,68,0.2); box-shadow: 0 16px 40px rgba(239,68,68,0.08);">
+                 <div class="card-header" style="border-bottom: 1px solid rgba(239,68,68,0.1); padding-bottom: 0.8rem; margin-bottom: 1rem;">
+                    <span class="badge badge-accent"><span style="color:#ef4444; margin-right: 4px;">▲</span> Improvement Tip</span>
                 </div>
-                <h4 style="font-size: 1.1rem; color: #fff; margin-bottom: 0.5rem;">Hand Entry Too Wide</h4>
-                <p style="font-size: 0.85rem; color: #a0aec0; line-height: 1.5; margin-bottom: 0;">Try entering your hand in line with your shoulder. This small fix can boost your speed by up to <span style="color: #ff0055; font-weight: bold;">10%</span>.</p>
+                <h4 style="font-size: 1.1rem; color: var(--text-main); margin-bottom: 0.5rem;">Hand Entry Too Wide</h4>
+                <p style="font-size: 0.85rem; color: var(--text-muted); line-height: 1.5; margin-bottom: 0;">Try entering your hand in line with your shoulder. This small fix can boost your speed by up to <span style="color: #ef4444; font-weight: bold;">10%</span>.</p>
             </div>
         </div>
     </header>
@@ -115,14 +110,14 @@
         
         <div class="tracker-container" style="display: grid; grid-template-columns: 1fr 1fr; gap: 2rem;">
             <div class="glass-card" style="display: flex; flex-direction: column; align-items: center; text-align: center; padding: 3rem 2rem;">
-                 <h3 style="color: var(--accent-cyan); font-size: 1.8rem; margin-bottom: 1rem;">📷 AI Motion Lab</h3>
-                 <p style="color: #a0aec0; margin-bottom: 2rem; flex-grow: 1;">Upload a swimming video for instant AI-powered movement analysis. Our vision engine automatically identifies incorrect stroke mechanics, highlights inefficient techniques, and provides targeted feedback to help you perfect your form and swim faster.</p>
+                 <h3 style="color: var(--accent-blue); font-size: 1.8rem; margin-bottom: 1rem;">📷 AI Motion Lab</h3>
+                 <p style="color: var(--text-muted); margin-bottom: 2rem; flex-grow: 1;">Upload a swimming video for instant AI-powered movement analysis. Our vision engine automatically identifies incorrect stroke mechanics, highlights inefficient techniques, and provides targeted feedback to help you perfect your form and swim faster.</p>
                  <a href="motion.html" class="btn btn-primary">Launch Vision Engine</a>
             </div>
             
              <div class="glass-card" style="display: flex; flex-direction: column; align-items: center; text-align: center; padding: 3rem 2rem;">
-                 <h3 style="color: var(--accent-blue); font-size: 1.8rem; margin-bottom: 1rem;">🧠 Virtual Head Coach</h3>
-                 <p style="color: #a0aec0; margin-bottom: 2rem; flex-grow: 1;">Ask highly technical questions regarding seasonal periodization, sprint sets, or targeted dryland mobility routines. Your elite virtual coach instantly generates customized training plans and workout intervals tailored precisely to help you crush your personal bests.</p>
+                 <h3 style="color: var(--accent-cyan); font-size: 1.8rem; margin-bottom: 1rem;">🧠 Virtual Head Coach</h3>
+                 <p style="color: var(--text-muted); margin-bottom: 2rem; flex-grow: 1;">Ask highly technical questions regarding seasonal periodization, sprint sets, or targeted dryland mobility routines. Your elite virtual coach instantly generates customized training plans and workout intervals tailored precisely to help you crush your personal bests.</p>
                  <a href="coach.html" class="btn btn-secondary">Start Consultation</a>
             </div>
         </div>

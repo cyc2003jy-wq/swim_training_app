@@ -148,8 +148,8 @@ function initParticles() {
             this.size = Math.random() * 3 + 1;
             this.speedX = (Math.random() - 0.5) * 0.5;
             this.speedY = (Math.random() - 0.5) * 0.3;
-            this.opacity = Math.random() * 0.3 + 0.05;
-            this.hue = Math.random() > 0.5 ? 190 : 200; // cyan-ish
+            this.opacity = Math.random() * 0.15 + 0.03;
+            this.hue = Math.random() > 0.5 ? 215 : 200; // blue-ish
         }
         
         update() {
@@ -185,7 +185,7 @@ function initParticles() {
                     ctx.beginPath();
                     ctx.moveTo(particles[i].x, particles[i].y);
                     ctx.lineTo(particles[j].x, particles[j].y);
-                    ctx.strokeStyle = `rgba(0, 242, 254, ${opacity})`;
+                    ctx.strokeStyle = `rgba(37, 99, 235, ${opacity})`;
                     ctx.lineWidth = 0.5;
                     ctx.stroke();
                 }
@@ -398,7 +398,7 @@ function drawSwimChart() {
         .slice(-7);
     
     if (recentLogs.length === 0) {
-        ctx.fillStyle = '#a0aec0';
+        ctx.fillStyle = '#64748b';
         ctx.font = '14px Inter, sans-serif';
         ctx.textAlign = 'center';
         ctx.fillText('No sessions yet — log your first swim!', chartCanvas.width / 2, 100);
@@ -418,8 +418,8 @@ function drawSwimChart() {
         
         // Gradient bar
         const gradient = ctx.createLinearGradient(x, y, x, chartHeight);
-        gradient.addColorStop(0, '#00f2fe');
-        gradient.addColorStop(1, 'rgba(79, 172, 254, 0.3)');
+        gradient.addColorStop(0, '#2563eb');
+        gradient.addColorStop(1, 'rgba(37, 99, 235, 0.15)');
         
         ctx.fillStyle = gradient;
         ctx.beginPath();
@@ -427,13 +427,13 @@ function drawSwimChart() {
         ctx.fill();
         
         // Distance label on top
-        ctx.fillStyle = '#fff';
+        ctx.fillStyle = '#1e293b';
         ctx.font = 'bold 11px Inter, sans-serif';
         ctx.textAlign = 'center';
         ctx.fillText(`${dist}m`, x + barWidth / 2, y - 6);
         
         // Date label at bottom
-        ctx.fillStyle = '#a0aec0';
+        ctx.fillStyle = '#64748b';
         ctx.font = '10px Inter, sans-serif';
         const dateLabel = new Date(log.date).toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
         ctx.fillText(dateLabel, x + barWidth / 2, chartHeight + 16);
