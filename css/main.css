@@ -1584,28 +1584,52 @@ select:focus, input[type="number"]:focus {
     line-height: 1.6;
 }
 
-#aiFeedbackBox h2, .chat-messages h2 {
+#aiFeedbackBox h1, .chat-messages h1 {
     font-size: 1.6rem;
     color: var(--accent-cyan);
     margin-top: 1.5rem;
     margin-bottom: 0.75rem;
+    font-weight: 800;
+    text-shadow: none;
+    letter-spacing: normal;
+    text-transform: none;
+    line-height: 1.4;
+}
+
+#aiFeedbackBox h2, .chat-messages h2 {
+    font-size: 1.4rem;
+    color: var(--accent-cyan);
+    margin-top: 1.5rem;
+    margin-bottom: 0.75rem;
     font-weight: 700;
+    text-shadow: none;
+    letter-spacing: normal;
+    text-transform: none;
+    line-height: 1.4;
 }
 
 #aiFeedbackBox h3, .chat-messages h3 {
-    font-size: 1.3rem;
+    font-size: 1.2rem;
     color: #fff;
     margin-top: 1.25rem;
     margin-bottom: 0.5rem;
     font-weight: 600;
+    text-shadow: none;
+    letter-spacing: normal;
+    text-transform: none;
+    line-height: 1.4;
 }
 
 #aiFeedbackBox h4, .chat-messages h4 {
-    font-size: 1.15rem;
+    font-size: 1.05rem;
     color: #e2e8f0;
     margin-top: 1rem;
     margin-bottom: 0.5rem;
     font-weight: 600;
+    text-shadow: none;
+    letter-spacing: normal;
+    text-transform: none;
+    line-height: 1.4;
 }
 
 #aiFeedbackBox strong, .chat-messages strong {
