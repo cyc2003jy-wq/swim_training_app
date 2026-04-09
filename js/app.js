@@ -1073,7 +1073,7 @@ async function generateAIReport(summary) {
     const reportBox = document.getElementById('aiFeedbackBox');
     feedbackList.innerHTML = `<li style="text-align: center; padding: 2rem;">
         <div class="pulse-dot" style="width: 12px; height: 12px; margin: 0 auto 1rem auto;"></div>
-        <strong style="color: var(--accent-cyan);">🧠 AI is generating your personalized coaching report...</strong>
+        <strong style="color: var(--accent-cyan);">AI is generating your personalized coaching report...</strong>
         <br><span style="color: var(--text-muted); font-size: 0.9rem;">Stroke detected: <strong>${strokeName}</strong></span>
     </li>`;
 
@@ -1127,7 +1127,7 @@ async function generateAIReport(summary) {
         }
     } catch (err) {
         console.error('AI Report error:', err);
-        feedbackList.innerHTML = `<li><strong style="color: #ff4a4a;">⚠️ Could not generate AI report.</strong><br>
+        feedbackList.innerHTML = `<li><strong style="color: #ff4a4a;">Could not generate AI report.</strong><br>
             <span style="color: #a0aec0;">Falling back to local analysis...</span></li>`;
         showLocalFallbackReport(summary);
     }
@@ -1139,22 +1139,22 @@ function showLocalFallbackReport(summary) {
     const total = summary.totalFrames;
     if (total === 0) { updateFeedback('Not enough frames.', 'warning'); return; }
 
-    addFeedbackItem(`🏊 Stroke: ${summary.stroke.charAt(0).toUpperCase() + summary.stroke.slice(1)}`, `Detected with ${Math.max(...Object.values(summary.votes))} confidence votes.`, 'neutral');
+    addFeedbackItem(`Stroke: ${summary.stroke.charAt(0).toUpperCase() + summary.stroke.slice(1)}`, `Detected with ${Math.max(...Object.values(summary.votes))} confidence votes.`, 'neutral');
 
     if (parseFloat(summary.avgLeftElbow) > 155 || parseFloat(summary.avgRightElbow) > 155) {
-        addFeedbackItem('❌ Dropped Elbow', `Avg elbow angle: L=${summary.avgLeftElbow}° R=${summary.avgRightElbow}°. Aim for 90-130° during the catch.`, 'error');
+        addFeedbackItem('Dropped Elbow', `Avg elbow angle: L=${summary.avgLeftElbow}° R=${summary.avgRightElbow}°. Aim for 90-130° during the catch.`, 'error');
     }
     if (parseFloat(summary.avgHeadDiff) > 0.08) {
-        addFeedbackItem('⚠️ Head Too High', 'Your head lifts above the body line frequently. Keep a neutral spine.', 'warning');
+        addFeedbackItem('Head Too High', 'Your head lifts above the body line frequently. Keep a neutral spine.', 'warning');
     }
     if (parseFloat(summary.hipDropPct) > 25) {
-        addFeedbackItem('⚠️ Hips Dropping', `Hips dropped in ${summary.hipDropPct}% of frames. Engage your core.`, 'warning');
+        addFeedbackItem('Hips Dropping', `Hips dropped in ${summary.hipDropPct}% of frames. Engage your core.`, 'warning');
     }
     if (parseFloat(summary.crossoverLeftPct) > 15 || parseFloat(summary.crossoverRightPct) > 15) {
-        addFeedbackItem('❌ Arm Crossover', `L: ${summary.crossoverLeftPct}%, R: ${summary.crossoverRightPct}%. Enter hands in line with your shoulder.`, 'error');
+        addFeedbackItem('Arm Crossover', `L: ${summary.crossoverLeftPct}%, R: ${summary.crossoverRightPct}%. Enter hands in line with your shoulder.`, 'error');
     }
     if (parseFloat(summary.avgShoulderTilt) < 0.02) {
-        addFeedbackItem('⚠️ Flat Body', 'You lack body rotation. Rotate from your hips for more power.', 'warning');
+        addFeedbackItem('Flat Body', 'You lack body rotation. Rotate from your hips for more power.', 'warning');
     }
 }
 
@@ -1231,7 +1231,7 @@ if (startAnalysisBtn) {
         resetAnalysisReport();
         videoElement.currentTime = 0;
         videoElement.play().then(() => {
-            updateFeedback("⏳ Video analysis in progress... The coaching report will be generated once playback completes.", "neutral");
+            updateFeedback("Video analysis in progress... The coaching report will be generated once playback completes.", "neutral");
             processUploadedVideo();
         }).catch(err => {
             console.error("Video play error:", err);
