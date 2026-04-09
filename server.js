@@ -129,7 +129,7 @@ Base your scores and feedback EXACTLY on these criteria. Map the provided biomec
 
 === REPORT STRUCTURE (FOLLOW EXACTLY) ===
 
-## 🏊 Swim Technique Report
+## Swim Technique Report
 
 ### 1. Stroke Identified
 State which stroke was detected (Freestyle / Backstroke / Breaststroke / Butterfly).
@@ -157,15 +157,15 @@ A short paragraph (2-3 sentences) describing weaknesses naturally. No raw bullet
 
 ### 4. Improvement Suggestions
 List concrete suggestions with priority tags:
-- 🔴 **[Issue]**: One sentence describing the problem → One sentence coaching cue to fix it → One sentence explaining *why* biomechanically this will make them faster/smoother.
-- 🟡 **[Issue]**: One sentence describing the problem → One sentence coaching cue to fix it → One sentence explaining *why* this matters.
+- **High Priority - [Issue]**: One sentence describing the problem → One sentence coaching cue to fix it → One sentence explaining *why* biomechanically this will make them faster/smoother.
+- **Medium Priority - [Issue]**: One sentence describing the problem → One sentence coaching cue to fix it → One sentence explaining *why* this matters.
 
 ### 5. Practice Drills
 2-3 specific, actionable drills. For each:
 - **[Drill Name]** — How to do it (1-2 sentences) | **Why it works:** (1 sentence biomechanical rationale)
 
 ---
-**💬 Coach's Note:** End with 2-3 sentences of genuine encouragement. Reference one specific strength, state the single most important next step, and close with motivation.`;
+**Coach's Note:** End with 2-3 sentences of genuine encouragement. Reference one specific strength, state the single most important next step, and close with motivation.`;
 
         const userMessage = `Analyze the following swimmer's pose-tracking data and generate my coaching report following the exact structure specified. Calculate scores strictly using the provided deviation formulas and weighted average logic.
 
