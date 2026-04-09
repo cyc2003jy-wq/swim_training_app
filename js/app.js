@@ -148,8 +148,8 @@ function initParticles() {
             this.size = Math.random() * 3 + 1;
             this.speedX = (Math.random() - 0.5) * 0.5;
             this.speedY = (Math.random() - 0.5) * 0.3;
-            this.opacity = Math.random() * 0.15 + 0.03;
-            this.hue = Math.random() > 0.5 ? 215 : 200; // blue-ish
+            this.opacity = Math.random() * 0.3 + 0.05;
+            this.hue = Math.random() > 0.5 ? 215 : 225; // blue-ish
         }
         
         update() {
@@ -419,7 +419,7 @@ function drawSwimChart() {
         // Gradient bar
         const gradient = ctx.createLinearGradient(x, y, x, chartHeight);
         gradient.addColorStop(0, '#2563eb');
-        gradient.addColorStop(1, 'rgba(37, 99, 235, 0.15)');
+        gradient.addColorStop(1, 'rgba(37, 99, 235, 0.3)');
         
         ctx.fillStyle = gradient;
         ctx.beginPath();
@@ -737,9 +737,9 @@ pose.onResults((results) => {
     if (results.poseLandmarks) {
         // Draw the skeleton overlay
         drawConnectors(canvasCtx, results.poseLandmarks, POSE_CONNECTIONS,
-                       {color: '#00d2ff', lineWidth: 4});
+                       {color: '#2563eb', lineWidth: 4});
         drawLandmarks(canvasCtx, results.poseLandmarks,
-                      {color: '#3a7bd5', lineWidth: 2, radius: 4});
+                      {color: '#0ea5e9', lineWidth: 2, radius: 4});
                       
         // Biomechanical Analysis Engine
         analyzeSwimmingAngles(results.poseLandmarks);
