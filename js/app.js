@@ -1202,29 +1202,41 @@ async function processUploadedVideo() {
     requestAnimationFrame(processUploadedVideo);
 }
 
-// 5. Video Upload Handler
+// 5. Video Upload & Analysis Handlers
 const uploadVideoBtn = document.getElementById('uploadVideoBtn');
-const strokeAlert = document.getElementById('strokeAlert');
+const startAnalysisBtn = document.getElementById('startAnalysisBtn');
+const startAlert = document.getElementById('startAlert');
 
-if (uploadVideoBtn) {
+if (uploadVideoBtn && videoUpload) {
     uploadVideoBtn.addEventListener('click', () => {
+        videoUpload.click();
+    });
+}
+
+if (startAnalysisBtn) {
+    startAnalysisBtn.addEventListener('click', () => {
         const strokeSelectEl = document.getElementById('strokeSelect');
-        if (!strokeSelectEl || !strokeSelectEl.value || strokeSelectEl.value === "") {
-            if (strokeAlert) {
-                strokeAlert.style.display = 'block';
-                // Trigger reflow
-                void strokeAlert.offsetWidth;
-                strokeAlert.style.opacity = '1';
+        if (!strokeSelectEl || !strokeSelectEl.value || strokeSelectEl.value === "" || !isVideoUploaded) {
+            if (startAlert) {
+                startAlert.style.display = 'block';
+                void startAlert.offsetWidth;
+                startAlert.style.opacity = '1';
                 setTimeout(() => {
-                    strokeAlert.style.opacity = '0';
-                    setTimeout(() => { strokeAlert.style.display = 'none'; }, 300);
+                    startAlert.style.opacity = '0';
+                    setTimeout(() => { startAlert.style.display = 'none'; }, 300);
                 }, 3000);
             }
             return;
         }
-        if (videoUpload) {
-            videoUpload.click();
-        }
+        
+        if (loadingAnalysis) loadingAnalysis.style.display = 'block';
+        videoElement.play().then(() => {
+            updateFeedback("⚙️ Analyzing video in real-time. Full report will instantly generate when playback completes.", "neutral");
+            processUploadedVideo();
+        }).catch(err => {
+            console.error("Video play error:", err);
+            updateFeedback("Could not play video. Try a different format (MP4 recommended).", "warning");
+        });
     });
 }
 
@@ -1256,14 +1268,12 @@ if (videoUpload) {
             canvasElement.width = 800;
             canvasElement.height = Math.round(800 / ratio);
             
-            videoElement.play().then(() => {
-                updateFeedback("⚙️ Analyzing video in real-time. Full report will instantly generate when playback completes.", "neutral");
-                if(videoControls) videoControls.style.display = 'block';
-                processUploadedVideo();
-            }).catch(err => {
-                console.error("Video play error:", err);
-                updateFeedback("Could not play video. Try a different format (MP4 recommended).", "warning");
-            });
+            // Render first frame for preview
+            canvasCtx.drawImage(videoElement, 0, 0, canvasElement.width, canvasElement.height);
+            
+            updateFeedback("✅ Video uploaded. Please select a stroke and click 'Start Analysis' to begin.", "neutral");
+            if(videoControls) videoControls.style.display = 'block';
+            if(loadingAnalysis) loadingAnalysis.style.display = 'none';
         };
         
         videoElement.onerror = () => {
