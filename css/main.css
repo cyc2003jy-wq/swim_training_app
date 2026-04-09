@@ -822,8 +822,8 @@ select:focus, input[type="number"]:focus {
     position: absolute;
     bottom: 5rem;
     right: 0;
-    width: 380px;
-    height: 500px;
+    width: 450px;
+    height: 700px;
     background: var(--bg-surface);
     backdrop-filter: blur(20px);
     border: 1px solid var(--glass-border);
@@ -981,13 +981,13 @@ select:focus, input[type="number"]:focus {
     display: flex;
     align-items: center;
     justify-content: center;
-    padding: 100px 2rem 2rem 2rem;
+    padding: 90px 1rem 1rem 1rem;
 }
 
 .chat-container {
     width: 100%;
-    max-width: 1600px;
-    height: calc(100vh - 140px);
+    max-width: 100%;
+    height: calc(100vh - 100px);
     display: flex;
     flex-direction: column;
     background: var(--bg-surface);
