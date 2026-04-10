@@ -221,7 +221,7 @@ Remember: Do NOT include raw numbers in the text output. Translate all metrics i
 });
 
 // Catch-all route to redirect any unknown paths to the homepage
-app.get('*', (req, res) => {
+app.get('(.*)', (req, res) => {
     res.redirect('/');
 });
 
