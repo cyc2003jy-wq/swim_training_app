@@ -1189,7 +1189,12 @@ async function generateAIReport(summary) {
     const dataPayload = JSON.stringify(summary, null, 2);
 
     try {
-        const response = await fetch('/api/analyze', {
+        // Automatically route to localhost:3000 if not on the main server port or running via file://
+        const isLocalDev = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1' || window.location.protocol === 'file:';
+        const isCorrectPort = window.location.port === '3000';
+        const baseUrl = (isLocalDev && !isCorrectPort) ? 'http://localhost:3000' : '';
+
+        const response = await fetch(`${baseUrl}/api/analyze`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ stroke: summary.stroke, data: dataPayload })
