@@ -177,7 +177,7 @@ app.post('/api/analyze', async (req, res) => {
 '=== REPORT STRUCTURE ===',
 'Follow this structure exactly. Use markdown formatting.',
 '',
-'## Swim Technique Report',
+'# Swim Technique Report',
 '',
 '### 1. Stroke Identified',
 'State the detected stroke in one line.',
