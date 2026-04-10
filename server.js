@@ -11,8 +11,13 @@ app.use(cors());
 app.use(express.json());
 
 // Serve static frontend files from the current directory
-// Assuming index.html, css/, and js/ are in the same directory as server.js
+// Serve static frontend files from the current directory
 app.use(express.static(path.join(__dirname)));
+
+// Explicitly route the root URL to the homepage
+app.get('/', (req, res) => {
+    res.sendFile(path.join(__dirname, 'index.html'));
+});
 
 // Health check endpoint for Render
 app.get('/healthz', (req, res) => {
@@ -213,6 +218,11 @@ Remember: Do NOT include raw numbers in the text output. Translate all metrics i
         console.error("Analyze API Error:", error);
         res.status(500).json({ error: "Failed to generate analysis report" });
     }
+});
+
+// Catch-all route to redirect any unknown paths to the homepage
+app.get('*', (req, res) => {
+    res.redirect('/');
 });
 
 app.listen(PORT, () => {
