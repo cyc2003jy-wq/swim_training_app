@@ -711,6 +711,7 @@ function resetToPlaceholder() {
     if(container && !container.classList.contains('pulse-border')) {
         container.classList.add('pulse-border');
     }
+    if (container) container.classList.remove('hide-laser');
     if(videoControls) videoControls.style.display = 'none';
     if(feedbackList) feedbackList.innerHTML = '<li><em>Upload a swimming video to begin analysis. The AI will identify your stroke and generate a personalized coaching report with specific drills.</em></li>';
 }
@@ -1239,8 +1240,18 @@ async function generateAIReport(summary) {
             }
             reportBox.scrollTop = reportBox.scrollHeight;
         }
+        
+        // Show laser back after analysis
+        const container = canvasElement.closest('.large-canvas-container');
+        if (container) container.classList.remove('hide-laser');
+
     } catch (err) {
         console.error('AI Report error:', err);
+        
+        // Show laser back even on error
+        const container = canvasElement.closest('.large-canvas-container');
+        if (container) container.classList.remove('hide-laser');
+
         feedbackList.innerHTML = `<li><strong style="color: #ff4a4a;">Could not generate AI report.</strong><br>
             <span style="color: #a0aec0;">Falling back to local analysis...</span></li>`;
         showLocalFallbackReport(summary);
@@ -1341,7 +1352,13 @@ if (startAnalysisBtn) {
             return;
         }
         
+        
         if (loadingAnalysis) loadingAnalysis.style.display = 'block';
+
+        // Hide laser during active analysis
+        const container = canvasElement.closest('.large-canvas-container');
+        if (container) container.classList.add('hide-laser');
+
         resetAnalysisReport();
         videoElement.currentTime = 0;
         videoElement.play().then(() => {
@@ -1405,6 +1422,11 @@ if(replayBtn) {
             videoElement.currentTime = 0;
             videoElement.play().then(() => {
                 updateFeedback("⚙️ Re-analyzing video... Please wait for completion.", "neutral");
+                
+                // Hide laser during active analysis
+                const container = canvasElement.closest('.large-canvas-container');
+                if (container) container.classList.add('hide-laser');
+
                 processUploadedVideo();
             });
         }

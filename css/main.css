@@ -1064,6 +1064,11 @@ select:focus, input[type="number"]:focus {
     z-index: 10;
 }
 
+.large-canvas-container.hide-laser::after {
+    display: none;
+    animation: none;
+}
+
 @keyframes scanLaser {
     0% { top: -10px; opacity: 0; }
     10% { opacity: 0.6; }
