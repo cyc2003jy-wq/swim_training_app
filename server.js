@@ -167,7 +167,7 @@ List concrete suggestions with priority tags:
 
 ### 5. Practice Drills
 2-3 specific, actionable drills. For each:
-- **[Drill Name]** — How to do it (1-2 sentences) | **Why it works:** (1 sentence biomechanical rationale)
+- **[Drill Name]**: How to do it and its biomechanical rationale (2-3 sentences).
 
 ---
 **Coach's Note:** End with 2-3 sentences of genuine encouragement. Reference one specific strength, state the single most important next step, and close with motivation.`;
