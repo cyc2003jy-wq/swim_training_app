@@ -748,8 +748,8 @@ pose.onResults((results) => {
 });
 
 // 3. ==========================================
-//    SMART SWIMMING ANALYSIS ENGINE v2.0
-//    Stroke Recognition + Per-Stroke Metrics
+//    SMART SWIMMING ANALYSIS ENGINE v3.0
+//    Stroke Recognition + Enhanced Per-Stroke Metrics
 // ==========================================
 
 // --- Stroke Classification Votes ---
@@ -759,29 +759,47 @@ let strokeVotes = { freestyle: 0, backstroke: 0, breaststroke: 0, butterfly: 0 }
 let analysisReport = {
     framesAnalyzed: 0,
     strokeDetected: 'unknown',
-    // Raw landmark snapshots for AI context
     metrics: {
-        // Shared
+        // === Shared (all strokes) ===
         avgLeftElbowAngle: [],
         avgRightElbowAngle: [],
         avgShoulderTilt: [],
         headPositionDiffs: [],
-        // Freestyle / Backstroke
+        bodyLineAngles: [],
+        hipDropCount: 0,
+        // NEW: Knee angles (over-bend detection)
+        avgLeftKneeAngle: [],
+        avgRightKneeAngle: [],
+        // NEW: Hip angles (body line / undulation phase)
+        avgLeftHipAngle: [],
+        avgRightHipAngle: [],
+        // NEW: Wrist entry position relative to shoulder width
+        wristEntryPositions: [],
+        // NEW: Body roll range (min/max shoulder tilt per analysis)
+        shoulderTiltMin: Infinity,
+        shoulderTiltMax: -Infinity,
+        // NEW: Head stability (collect all for variance calc)
+        headYPositions: [],
+        // NEW: Ankle vertical positions for kick tempo
+        leftAnkleYHistory: [],
+        rightAnkleYHistory: [],
+
+        // === Freestyle / Backstroke ===
         leftCrossoverCount: 0,
         rightCrossoverCount: 0,
         armAlternationScore: 0,
         armSimultaneousScore: 0,
-        // Breaststroke
+
+        // === Breaststroke ===
         kneeWidthRatios: [],
         armSymmetryScores: [],
         glideFrames: 0,
-        // Butterfly
+        activeFrames: 0,
+
+        // === Butterfly ===
         bodyUndulationAmplitudes: [],
         doubleKickDetected: 0,
         singleKickDetected: 0,
-        // Body line
-        bodyLineAngles: [],
-        hipDropCount: 0,
     }
 };
 
@@ -793,22 +811,37 @@ function resetAnalysisReport() {
     analysisReport.strokeDetected = 'unknown';
     strokeVotes = { freestyle: 0, backstroke: 0, breaststroke: 0, butterfly: 0 };
     const m = analysisReport.metrics;
+    // Shared
     m.avgLeftElbowAngle = [];
     m.avgRightElbowAngle = [];
     m.avgShoulderTilt = [];
     m.headPositionDiffs = [];
+    m.bodyLineAngles = [];
+    m.hipDropCount = 0;
+    m.avgLeftKneeAngle = [];
+    m.avgRightKneeAngle = [];
+    m.avgLeftHipAngle = [];
+    m.avgRightHipAngle = [];
+    m.wristEntryPositions = [];
+    m.shoulderTiltMin = Infinity;
+    m.shoulderTiltMax = -Infinity;
+    m.headYPositions = [];
+    m.leftAnkleYHistory = [];
+    m.rightAnkleYHistory = [];
+    // Freestyle / Backstroke
     m.leftCrossoverCount = 0;
     m.rightCrossoverCount = 0;
     m.armAlternationScore = 0;
     m.armSimultaneousScore = 0;
+    // Breaststroke
     m.kneeWidthRatios = [];
     m.armSymmetryScores = [];
     m.glideFrames = 0;
+    m.activeFrames = 0;
+    // Butterfly
     m.bodyUndulationAmplitudes = [];
     m.doubleKickDetected = 0;
     m.singleKickDetected = 0;
-    m.bodyLineAngles = [];
-    m.hipDropCount = 0;
 }
 
 let prevLeftWristY = null;
@@ -962,7 +995,7 @@ function analyzeSwimmingAngles(landmarks) {
 
     // ============ COLLECT UNIVERSAL METRICS ============
 
-    // Elbow angles
+    // Elbow angles (catch quality indicator)
     if (leftElbow.visibility > 0.5 && leftWrist.visibility > 0.5) {
         m.avgLeftElbowAngle.push(calculateAngle(leftShoulder, leftElbow, leftWrist));
     }
@@ -970,13 +1003,48 @@ function analyzeSwimmingAngles(landmarks) {
         m.avgRightElbowAngle.push(calculateAngle(rightShoulder, rightElbow, rightWrist));
     }
 
-    // Shoulder tilt (rotation)
-    m.avgShoulderTilt.push(Math.abs(leftShoulder.y - rightShoulder.y));
+    // NEW: Knee angles (kick efficiency — over-bend = drag)
+    if (leftKnee.visibility > 0.4 && leftAnkle.visibility > 0.4 && leftHip.visibility > 0.4) {
+        m.avgLeftKneeAngle.push(calculateAngle(leftHip, leftKnee, leftAnkle));
+    }
+    if (rightKnee.visibility > 0.4 && rightAnkle.visibility > 0.4 && rightHip.visibility > 0.4) {
+        m.avgRightKneeAngle.push(calculateAngle(rightHip, rightKnee, rightAnkle));
+    }
+
+    // NEW: Hip angles (body line quality, extension)
+    if (leftHip.visibility > 0.4 && leftKnee.visibility > 0.4) {
+        m.avgLeftHipAngle.push(calculateAngle(leftShoulder, leftHip, leftKnee));
+    }
+    if (rightHip.visibility > 0.4 && rightKnee.visibility > 0.4) {
+        m.avgRightHipAngle.push(calculateAngle(rightShoulder, rightHip, rightKnee));
+    }
+
+    // Shoulder tilt (rotation / body roll)
+    const currentTilt = Math.abs(leftShoulder.y - rightShoulder.y);
+    m.avgShoulderTilt.push(currentTilt);
+    // NEW: Track min/max for body roll range
+    if (currentTilt < m.shoulderTiltMin) m.shoulderTiltMin = currentTilt;
+    if (currentTilt > m.shoulderTiltMax) m.shoulderTiltMax = currentTilt;
 
     // Head position relative to shoulder line
     if (nose.visibility > 0.5) {
         m.headPositionDiffs.push(shoulderMidY - nose.y);
+        // NEW: raw Y positions for head stability variance
+        m.headYPositions.push(nose.y);
     }
+
+    // NEW: Wrist entry position (distance from shoulder line)
+    const midline = (leftShoulder.x + rightShoulder.x) / 2;
+    if (leftWrist.visibility > 0.5 && leftWrist.y < leftShoulder.y) {
+        m.wristEntryPositions.push(Math.abs(leftWrist.x - leftShoulder.x) / shoulderWidth);
+    }
+    if (rightWrist.visibility > 0.5 && rightWrist.y < rightShoulder.y) {
+        m.wristEntryPositions.push(Math.abs(rightWrist.x - rightShoulder.x) / shoulderWidth);
+    }
+
+    // NEW: Ankle Y positions for kick tempo analysis
+    if (leftAnkle.visibility > 0.3) m.leftAnkleYHistory.push(leftAnkle.y);
+    if (rightAnkle.visibility > 0.3) m.rightAnkleYHistory.push(rightAnkle.y);
 
     // Body line angle (shoulder-hip alignment)
     if (leftHip.visibility > 0.4 && rightHip.visibility > 0.4) {
@@ -991,7 +1059,6 @@ function analyzeSwimmingAngles(landmarks) {
 
     // ============ FREESTYLE/BACKSTROKE SPECIFIC ============
     // Crossover detection
-    const midline = (leftShoulder.x + rightShoulder.x) / 2;
     if (leftWrist.visibility > 0.5 && leftWrist.y < leftShoulder.y && leftWrist.x > midline + 0.06) {
         m.leftCrossoverCount++;
     }
@@ -1009,6 +1076,12 @@ function analyzeSwimmingAngles(landmarks) {
     }
     if (armsSymmetric) {
         m.armSymmetryScores.push(1 - wristYDiff);
+    }
+    // NEW: Glide vs active ratio
+    if (neitherArmUp && armsSymmetric) {
+        m.glideFrames++;
+    } else {
+        m.activeFrames++;
     }
 
     // ============ BUTTERFLY SPECIFIC ============
@@ -1041,27 +1114,63 @@ function computeSummary() {
 
     const avg = arr => arr.length > 0 ? (arr.reduce((a, b) => a + b, 0) / arr.length).toFixed(1) : 'N/A';
     const pct = val => total > 0 ? ((val / total) * 100).toFixed(0) : '0';
+    const stddev = arr => {
+        if (arr.length < 2) return 'N/A';
+        const mean = arr.reduce((a, b) => a + b, 0) / arr.length;
+        const variance = arr.reduce((sum, v) => sum + (v - mean) ** 2, 0) / arr.length;
+        return Math.sqrt(variance).toFixed(4);
+    };
+    const cv = arr => {
+        if (arr.length < 2) return 'N/A';
+        const mean = arr.reduce((a, b) => a + b, 0) / arr.length;
+        if (mean === 0) return 'N/A';
+        const sd = Math.sqrt(arr.reduce((sum, v) => sum + (v - mean) ** 2, 0) / arr.length);
+        return ((sd / mean) * 100).toFixed(1);
+    };
 
     return {
         stroke: stroke,
         totalFrames: total,
         votes: strokeVotes,
+        // --- Elbow (catch quality) ---
         avgLeftElbow: avg(m.avgLeftElbowAngle),
         avgRightElbow: avg(m.avgRightElbowAngle),
         minLeftElbow: m.avgLeftElbowAngle.length > 0 ? Math.min(...m.avgLeftElbowAngle).toFixed(0) : 'N/A',
         minRightElbow: m.avgRightElbowAngle.length > 0 ? Math.min(...m.avgRightElbowAngle).toFixed(0) : 'N/A',
+        // --- Knee (kick efficiency) ---
+        avgLeftKnee: avg(m.avgLeftKneeAngle),
+        avgRightKnee: avg(m.avgRightKneeAngle),
+        // --- Hip (body extension) ---
+        avgLeftHip: avg(m.avgLeftHipAngle),
+        avgRightHip: avg(m.avgRightHipAngle),
+        // --- Shoulder / Body Roll ---
         avgShoulderTilt: avg(m.avgShoulderTilt),
         maxShoulderTilt: m.avgShoulderTilt.length > 0 ? Math.max(...m.avgShoulderTilt).toFixed(3) : 'N/A',
+        bodyRollRange: (m.shoulderTiltMax !== -Infinity && m.shoulderTiltMin !== Infinity)
+            ? (m.shoulderTiltMax - m.shoulderTiltMin).toFixed(3) : 'N/A',
+        // --- Head ---
         avgHeadDiff: avg(m.headPositionDiffs),
+        headStabilityVariance: stddev(m.headYPositions),
+        // --- Body Line ---
         avgBodyAngle: avg(m.bodyLineAngles),
         hipDropPct: pct(m.hipDropCount),
+        // --- Wrist Entry ---
+        avgWristEntryWidth: avg(m.wristEntryPositions),
+        // --- Kick Tempo ---
+        kickTempoCV: cv(m.leftAnkleYHistory.length > m.rightAnkleYHistory.length ? m.leftAnkleYHistory : m.rightAnkleYHistory),
+        // --- Arm Pattern ---
         crossoverLeftPct: pct(m.leftCrossoverCount),
         crossoverRightPct: pct(m.rightCrossoverCount),
         armAlternationPct: pct(m.armAlternationScore),
         armSimultaneousPct: pct(m.armSimultaneousScore),
+        // --- Breaststroke ---
         avgKneeWidthRatio: avg(m.kneeWidthRatios),
-        avgUndulation: avg(m.bodyUndulationAmplitudes),
         armSymmetry: avg(m.armSymmetryScores),
+        glideToActiveRatio: (m.glideFrames + m.activeFrames) > 0
+            ? (m.glideFrames / (m.glideFrames + m.activeFrames)).toFixed(2) : 'N/A',
+        // --- Butterfly ---
+        avgUndulation: avg(m.bodyUndulationAmplitudes),
+        undulationCV: cv(m.bodyUndulationAmplitudes),
     };
 }
 
