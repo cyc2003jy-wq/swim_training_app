@@ -1175,6 +1175,64 @@ function computeSummary() {
     };
 }
 
+// ============ REPORT TEXT PRE-PROCESSING ============
+// Fix formatting issues from AI output before markdown parsing
+function fixReportFormatting(text) {
+    // Comprehensive regex to merge emoji on separate lines with the following text
+    // Match any line that is just a list item with an emoji, followed by a new line with bold text
+    const emojiPattern = /[🔴🟡🟢🔵🟠⚪⚫🔶🔷]/u;
+    
+    // Split into lines and merge emoji-only lines with the next line
+    const lines = text.split('\n');
+    const result = [];
+    for (let i = 0; i < lines.length; i++) {
+        const trimmed = lines[i].trim();
+        // Check if this line is a list item with only an emoji (e.g., "- 🔴" or "* 🔴")
+        const isEmojiOnlyListItem = /^[-*]\s*(🔴|🟡|🟢|🔵|🟠)\s*$/.test(trimmed);
+        // Check if this line is just an emoji with no list marker
+        const isEmojiOnly = /^(🔴|🟡|🟢|🔵|🟠)\s*$/.test(trimmed);
+        
+        if ((isEmojiOnlyListItem || isEmojiOnly) && i + 1 < lines.length) {
+            // Get the leading whitespace and dash from current line
+            const leadingMatch = lines[i].match(/^(\s*[-*]\s*)/);
+            const emoji = trimmed.replace(/^[-*]\s*/, '').trim();
+            const nextLine = lines[i + 1].trim();
+            
+            if (leadingMatch) {
+                // Merge: "- 🔴" + "\n**High Priority..." -> "- 🔴 **High Priority..."
+                result.push(leadingMatch[1] + emoji + ' ' + nextLine);
+            } else {
+                // Merge without dash
+                result.push(emoji + ' ' + nextLine);
+            }
+            i++; // Skip next line since we merged it
+        } else {
+            result.push(lines[i]);
+        }
+    }
+    return result.join('\n');
+}
+
+// Post-process rendered HTML to merge any leftover emoji-only list items
+function fixRenderedHTML(html) {
+    const container = document.createElement('div');
+    container.innerHTML = html;
+    
+    const listItems = container.querySelectorAll('li');
+    for (let i = 0; i < listItems.length - 1; i++) {
+        const text = listItems[i].textContent.trim();
+        // If this li contains only an emoji
+        if (/^(🔴|🟡|🟢|🔵|🟠)$/.test(text)) {
+            // Merge with next li
+            const nextLi = listItems[i + 1];
+            nextLi.innerHTML = text + ' ' + nextLi.innerHTML;
+            listItems[i].remove();
+        }
+    }
+    
+    return container.innerHTML;
+}
+
 // ============ AI REPORT GENERATION ============
 async function generateAIReport(summary) {
     const strokeNames = { freestyle: 'Freestyle', backstroke: 'Backstroke', breaststroke: 'Breaststroke', butterfly: 'Butterfly' };
@@ -1234,7 +1292,7 @@ async function generateAIReport(summary) {
                 }
             }
             if (typeof marked !== 'undefined') {
-                reportDiv.innerHTML = marked.parse(fullText);
+                reportDiv.innerHTML = fixRenderedHTML(marked.parse(fixReportFormatting(fullText)));
             } else {
                 reportDiv.textContent = fullText;
             }

@@ -1612,6 +1612,12 @@ select:focus, input[type="number"]:focus {
     line-height: 1.2;
 }
 
+/* Remove blank space above the first heading in the report */
+#aiFeedbackBox h1:first-child,
+#aiFeedbackBox div > h1:first-child {
+    margin-top: 0;
+}
+
 #aiFeedbackBox h2, .chat-messages h2 {
     font-size: 1.45rem;
     color: var(--accent-blue);
