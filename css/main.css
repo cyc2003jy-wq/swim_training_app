@@ -103,6 +103,14 @@ body {
 
 .index-page-body .video-bg-container {
     background: url('../assets/images/hero_bg.png') center center/cover no-repeat fixed;
+    image-rendering: -webkit-optimize-contrast;
+    image-rendering: crisp-edges;
+}
+
+/* Remove blurred blobs from the index page specifically to preserve HD image clarity */
+.index-page-body .video-bg-container::before, 
+.index-page-body .video-bg-container::after {
+    display: none !important;
 }
 
 .video-overlay {
