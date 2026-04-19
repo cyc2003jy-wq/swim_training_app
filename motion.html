@@ -49,7 +49,7 @@
             <h1 class="gradient-text">AI Motion Lab</h1>
             <p class="hero-subtitle">Upload a video of your swimming to get AI-powered technique analysis. Our engine tracks your skeleton, identifies your stroke, and generates a personalized coaching report.</p>
             
-            <div class="camera-controls" style="margin-top: 2rem; display: flex; gap: 1rem; align-items: flex-end; flex-wrap: wrap;">
+            <div class="camera-controls glass-card" style="position: sticky; top: 90px; z-index: 50; padding: 1.5rem; margin-top: 2rem; display: flex; gap: 1.5rem; align-items: flex-end; flex-wrap: wrap; margin-bottom: 2rem; border-width: 1px;">
                 <button id="uploadVideoBtn" class="btn btn-primary">Upload Swimming Video</button>
                 <input type="file" id="videoUpload" accept="video/*" style="display: none;">
                 
@@ -74,13 +74,14 @@
                         <div style="position: absolute; bottom: -4px; left: 20px; width: 8px; height: 8px; background: #ef4444; transform: rotate(45deg);"></div>
                     </div>
                 </div>
-            </div>
-            <div id="videoControls" style="margin-top: 1rem; display: none;">
-                <button id="replayBtn" class="btn btn-secondary btn-small">Replay</button>
-                <button id="clearVideoBtn" class="btn btn-danger btn-small" style="margin-left: 0.5rem;">Clear</button>
+                
+                <div id="videoControls" style="display: none; align-items: center; gap: 0.5rem;">
+                    <button id="replayBtn" class="btn btn-secondary btn-small">Replay</button>
+                    <button id="clearVideoBtn" class="btn btn-danger btn-small" style="margin-top: 0;">Clear</button>
+                </div>
             </div>
             
-            <div id="aiFeedbackBox" class="glass-card" style="margin-top: 2rem; border-left: 4px solid var(--accent-blue); max-height: 60vh; overflow-y: auto;">
+            <div id="aiFeedbackBox" class="glass-card" style="margin-top: 1rem; margin-bottom: 4rem; border-left: 4px solid var(--accent-blue); max-height: none; overflow-y: visible;" class="glass-card" style="margin-top: 2rem; border-left: 4px solid var(--accent-blue); max-height: 60vh; overflow-y: auto;">
                 <ul id="feedbackList" class="feature-list" style="margin-top: 0; list-style: none; padding: 0;">
                     <li><em>Upload a swimming video to begin analysis. The AI will identify your stroke and generate a personalized coaching report with specific drills.</em></li>
                 </ul>
