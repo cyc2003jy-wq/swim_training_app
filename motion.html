@@ -49,7 +49,7 @@
             <h1 class="gradient-text">AI Motion Lab</h1>
             <p class="hero-subtitle">Upload a video of your swimming to get AI-powered technique analysis. Our engine tracks your skeleton, identifies your stroke, and generates a personalized coaching report.</p>
             
-            <div class="camera-controls glass-card" style="position: relative; z-index: 20; padding: 1.5rem; margin-top: 2rem; display: flex; gap: 1rem; align-items: flex-end; flex-wrap: nowrap; overflow: visible; white-space: nowrap; margin-bottom: 2rem; border-width: 1px;">
+            <div class="camera-controls glass-card" style="position: relative; z-index: 20; padding: 1.5rem; margin-top: 2rem; display: flex; gap: 1rem; align-items: flex-end; flex-wrap: wrap; overflow: visible; margin-bottom: 2rem; border-width: 1px;">
                 <button id="uploadVideoBtn" class="btn btn-primary">Upload Swimming Video</button>
                 <input type="file" id="videoUpload" accept="video/*" style="display: none;">
                 
@@ -75,7 +75,7 @@
                     </div>
                 </div>
                 
-                <div id="videoControls" style="display: none; align-items: center; gap: 0.5rem;">
+                <div id="videoControls" style="display: none; align-items: center; gap: 0.5rem; flex-basis: 100%; justify-content: flex-start; margin-top: 0.5rem;">
                     <button id="replayBtn" class="btn btn-secondary btn-small">Replay</button>
                     <button id="clearVideoBtn" class="btn btn-danger btn-small" style="margin-top: 0;">Clear</button>
                 </div>
