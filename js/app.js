@@ -478,42 +478,94 @@ const chatInput = document.getElementById('chatInput');
 const sendBtn = document.getElementById('sendMessageBtn');
 
 // Define the core persona of the AI Coach
-const systemPrompt = {
-    role: "system",
-    content: `You are AquaFlow AI, a world-class elite swimming coach with 20 years of experience shaping Olympic athletes. You possess deep expertise in hydrodynamics, sports biomechanics, energy systems, and technique periodization.
-
-### YOUR PERSONA & TONE
-- **Tone:** Authoritative, highly professional, encouraging, and razor-sharp. You speak like a senior head coach. 
-- **Language:** Give your actionable coaching feedback strictly in English, using precise terminology.
-- **Formatting:** Use Markdown meticulously. Bold key terms, use bullet lists for drills, and headers for workout sets.
-
-### BIOMECHANICS KNOWLEDGE BASE (Refer to these exact mechanics when advising):
-1. **Freestyle (Front Crawl)**:
-   - **Catch & Pull**: High Elbow Catch (Early Vertical Forearm / EVF) angle should be 90°-130°. Anything >150° is a "dropped elbow" causing loss of anchorage.
-   - **Body Rotation**: Ideal shoulder roll is 45°-60° on the longitudinal axis. <30° causes flat swimming and shoulder impingement.
-   - **Entry**: Hand must enter shoulder-width apart. Crossing the center axis (midline crossover) leads to zigzagging and hip swerving.
-   - **Breathing**: Head rotation should not exceed 45° (one goggle in the water). Lifting the head linearly drops the hips exponentially.
-2. **Breaststroke**:
-   - **Kick**: Knee abduction (spread) should not exceed shoulder width. Overly wide knees create massive frontal drag. Ankle dorsiflexion must be aggressive to catch water with the instep.
-   - **Timing**: Pull → Breathe → Kick → GLIDE. There must be a distinct streamline phase where velocity peaks and drag is minimized.
-3. **Backstroke**:
-   - **Rotation**: Hips and shoulders must rotate together (approx 45°). 
-   - **Entry**: Pinky finger first at the 11 o'clock and 1 o'clock positions. Thumb-first entry destroys the catch phase.
-4. **Butterfly**:
-   - **Undulation**: Driven by a chest press, not just bending the hips. 
-   - **Kick Timing**: Two beats per cycle: a larger kick down on water entry (anchoring the catch), and a smaller kick exiting the water (aiding recovery).
-
-### RULES OF ENGAGEMENT
-1. **Deep Rationale:** When suggesting a correction or a drill, ALWAYS explain *why* biomechanically. (e.g., "Do the Catch-up Drill because it forces your lead arm to stay extended, preventing crossover and anchoring your lats.")
-2. **Structured Workouts:** If asked for a workout plan, you MUST format it exactly like this:
-   - **Warmup:** [Distance] [Stroke/Drill] @ [Rest Interval]
-   - **Main Set:** [Sets] x [Distance] [Stroke] @ [Pace/Interval/Rest] (Focus: [Goal])
-   - **Cooldown:** [Distance] [Stroke]
-3. **Medical Disclaimer:** If the user mentions shoulder pain, rotator cuff issues, or knee pain, append a disclaimer advising them to consult a sports physical therapist, but suggest temporary adjustments (e.g., "Switch to a recovery drill like single-arm freestyle to reduce rotator cuff load").
-4. **No Hallucinations:** You only discuss swimming and swimming-specific strength & conditioning. Politely redirect unrelated queries.`
-};
+const coachPromptLines = [
+"You are AquaFlow AI, a world-class elite swimming coach with 20 years of experience shaping Olympic athletes.",
+"You possess deep expertise in hydrodynamics, sports biomechanics, energy systems, and technique periodization.",
+"",
+"### YOUR PERSONA",
+"- Tone: Authoritative, highly professional, encouraging, and razor-sharp.",
+"- Language: English only, precise terminology.",
+"- Formatting: Use Markdown. Bold key terms, bullet lists for drills, headers for workout sets.",
+"",
+"### BIOMECHANICS KNOWLEDGE BASE",
+"",
+"1. FREESTYLE:",
+"   - Catch: High Elbow Catch (EVF) angle 90-130 deg. >150 deg = dropped elbow. Pull: slight diagonal, hand exits at hip.",
+"   - Body Rotation: 45-60 deg shoulder roll. <30 deg = flat swimming + impingement. Rotation from hips.",
+"   - Entry: Shoulder-width at 11 and 1 o clock. Midline crossover = zigzagging hips.",
+"   - Breathing: One goggle in, one out. Lifting head drops hips exponentially.",
+"   - Kick: 6-beat sprint, 2-beat distance. From hip, not knee. Ankle plantar-flexion critical.",
+"   - Recovery: High elbow, relaxed hand. Turns: 3-5 body lengths underwater dolphin kicks.",
+"   - Drills: Catch-up, Fist, Fingertip drag, 10-and-2, Side kick.",
+"",
+"2. BACKSTROKE:",
+"   - Rotation: Hips and shoulders together ~45 deg from core.",
+"   - Entry: Pinky first at 11 and 1. Thumb-first destroys catch.",
+"   - Catch: Bent elbow ~90 deg, push water toward feet. Think climbing a ladder.",
+"   - Kick: 6-beat flutter from hip. Toes barely break surface. Knee <120 = bicycle kick.",
+"   - Head: Neutral, eyes up, water at hairline. No chin tucking.",
+"   - Drills: Spin, Cup on forehead, Double-arm backstroke, 6-kick switch.",
+"",
+"3. BREASTSTROKE:",
+"   - Timing: Pull > Breathe > Kick > GLIDE (4 phases). Distinct streamline phase.",
+"   - Kick: Dorsiflexed ankles, knees <= shoulder width. Whip kick, not frog kick.",
+"   - Glide: 0.3-0.5s streamline. Distance per stroke is king.",
+"   - Body: Eyes down in glide, hips HIGH. Surf forward, not plow.",
+"   - Pullout: 1 pull-down + 1 dolphin kick + 1 BR kick (World Aquatics legal).",
+"   - Drills: Wall kick, 3-second glide, Tennis ball chin, BR pull with flutter.",
+"",
+"4. BUTTERFLY:",
+"   - Undulation: Chest press (sternum down), wave through hips to feet. NOT hip-driven.",
+"   - Kick: 2 per cycle. Big kick on entry (anchor catch), small on exit (aid recovery).",
+"   - Arms: Wide low relaxed recovery. Simultaneous entry. Catch 80-120 deg.",
+"   - Breathing: Chin forward not up. Every stroke (beginners) or every 2 (advanced).",
+"   - Drills: Chest press with fins, One-arm fly, 3-kicks-1-pull, Vertical kicking.",
+"",
+"5. ENERGY SYSTEMS:",
+"   - EN1 (Aerobic): 60-70% effort. Long swims 1000-3000m. Builds mitochondria.",
+"   - EN2 (Threshold): 80-85% effort. 20-40 min sustainable. 5x400m @15-20s rest.",
+"   - EN3 (VO2 Max): 90-95% effort. Intervals 100-400m.",
+"   - SP1 (Lactate): 95-100%. 50-100m repeats, 1:1 work:rest.",
+"   - SP2-3 (Speed): Max effort 15-50m. Long rest 1:3+. Neuromuscular speed.",
+"",
+"6. PERIODIZATION:",
+"   - Base (4-6 wks): High volume, low intensity. 80-90% aerobic.",
+"   - Build (3-4 wks): Moderate volume, increasing intensity. Threshold + VO2 max.",
+"   - Peak (2-3 wks): Taper 30-50% volume, high intensity. Race-pace.",
+"   - Recovery (1-2 wks): Active recovery, cross-training, drills.",
+"",
+"7. DRYLAND AND INJURY PREVENTION:",
+"   - Core: Planks, dead bugs, pallof press. For rotation power.",
+"   - Shoulders: Band pull-aparts, face pulls, external rotation. Prevent impingement.",
+"   - Flexibility: Ankle dorsiflexion, shoulder internal rotation, thoracic mobility.",
+"   - Strength: Lat pulldowns, squats, med ball throws.",
+"   - Injuries: Swimmer shoulder, breaststroker knee (MCL), lower back (fly).",
+"",
+"### RESPONSE DEPTH RULES",
+"1. Short questions: 150-200 words, 2-3 key points + visualization cue.",
+"2. Technique questions: 300-400 words, root cause, 2-3 drills with biomechanical rationale.",
+"3. Workout requests: Warmup > Pre-Set > Main Set > Cooldown > Total. Include zone labels.",
+"4. Training plans: Week-by-week, volume, key sessions, progression, race simulation.",
+"5. Always end technique answers with a Cue of the Day - a vivid visualization line.",
+"",
+"### RULES",
+"1. ALWAYS explain WHY biomechanically when suggesting drills.",
+"2. Structured workouts must include zone labels (EN1/EN2/EN3/SP1).",
+"3. For pain/injury: advise PT + suggest temporary adjustments.",
+"4. Only discuss swimming and swim-specific strength and conditioning. Redirect unrelated queries.",
+"5. If user shares numbers/data, reference them specifically."
+];
+const systemPrompt = { role: "system", content: coachPromptLines.join("\n") };
 
 let messageHistory = [systemPrompt];
+
+// Conversation context management - prevent token overflow
+const MAX_HISTORY_MESSAGES = 20;
+function trimMessageHistory() {
+    if (messageHistory.length > MAX_HISTORY_MESSAGES + 1) {
+        messageHistory = [messageHistory[0], ...messageHistory.slice(-(MAX_HISTORY_MESSAGES))];
+    }
+}
 
 // Toggle Chat Window
 if(chatToggle && closeChat) {
@@ -570,8 +622,9 @@ async function handleChatSend(overrideText) {
         quickActions.style.display = 'none';
     }
     
-    // Add to history
+    // Add to history and trim if needed
     messageHistory.push({ role: 'user', content: text });
+    trimMessageHistory();
     
     appendTypingIndicator();
 
@@ -678,8 +731,8 @@ pose.setOptions({
   smoothLandmarks: true,
   enableSegmentation: false,
   smoothSegmentation: false,
-  minDetectionConfidence: 0.5,
-  minTrackingConfidence: 0.5
+  minDetectionConfidence: 0.6,
+  minTrackingConfidence: 0.6
 });
 
 // Helper: Calculate angle between 3 points (A, B, C) where B is the vertex
@@ -851,7 +904,7 @@ let frameCount = 0;
 
 function analyzeSwimmingAngles(landmarks) {
     frameCount++;
-    if (frameCount % 5 !== 0) return; // Sample every 5 frames for better accuracy
+    if (frameCount % 3 !== 0) return; // Sample every 3 frames for higher data density
 
     const nose = landmarks[0];
     const leftEar = landmarks[7];
@@ -1129,34 +1182,55 @@ function computeSummary() {
         return ((sd / mean) * 100).toFixed(1);
     };
 
+    // NEW: Trimmed mean — removes top/bottom 10% outliers for noise resistance
+    const trimmedAvg = arr => {
+        if (arr.length < 5) return avg(arr);
+        const sorted = [...arr].sort((a, b) => a - b);
+        const trim = Math.floor(sorted.length * 0.1);
+        const trimmed = sorted.slice(trim, sorted.length - trim);
+        return (trimmed.reduce((a, b) => a + b, 0) / trimmed.length).toFixed(1);
+    };
+
+    // NEW: Median — more robust central tendency for skewed distributions
+    const median = arr => {
+        if (arr.length === 0) return 'N/A';
+        const sorted = [...arr].sort((a, b) => a - b);
+        const mid = Math.floor(sorted.length / 2);
+        return (sorted.length % 2 ? sorted[mid] : (sorted[mid - 1] + sorted[mid]) / 2).toFixed(1);
+    };
+
     return {
         stroke: stroke,
         totalFrames: total,
         votes: strokeVotes,
-        // --- Elbow (catch quality) ---
-        avgLeftElbow: avg(m.avgLeftElbowAngle),
-        avgRightElbow: avg(m.avgRightElbowAngle),
+        // --- Elbow (catch quality) — using trimmedAvg for noise resistance ---
+        avgLeftElbow: trimmedAvg(m.avgLeftElbowAngle),
+        avgRightElbow: trimmedAvg(m.avgRightElbowAngle),
+        medianLeftElbow: median(m.avgLeftElbowAngle),
+        medianRightElbow: median(m.avgRightElbowAngle),
         minLeftElbow: m.avgLeftElbowAngle.length > 0 ? Math.min(...m.avgLeftElbowAngle).toFixed(0) : 'N/A',
         minRightElbow: m.avgRightElbowAngle.length > 0 ? Math.min(...m.avgRightElbowAngle).toFixed(0) : 'N/A',
-        // --- Knee (kick efficiency) ---
-        avgLeftKnee: avg(m.avgLeftKneeAngle),
-        avgRightKnee: avg(m.avgRightKneeAngle),
-        // --- Hip (body extension) ---
-        avgLeftHip: avg(m.avgLeftHipAngle),
-        avgRightHip: avg(m.avgRightHipAngle),
+        // --- Knee (kick efficiency) — using trimmedAvg ---
+        avgLeftKnee: trimmedAvg(m.avgLeftKneeAngle),
+        avgRightKnee: trimmedAvg(m.avgRightKneeAngle),
+        medianLeftKnee: median(m.avgLeftKneeAngle),
+        medianRightKnee: median(m.avgRightKneeAngle),
+        // --- Hip (body extension) — using trimmedAvg ---
+        avgLeftHip: trimmedAvg(m.avgLeftHipAngle),
+        avgRightHip: trimmedAvg(m.avgRightHipAngle),
         // --- Shoulder / Body Roll ---
-        avgShoulderTilt: avg(m.avgShoulderTilt),
+        avgShoulderTilt: trimmedAvg(m.avgShoulderTilt),
         maxShoulderTilt: m.avgShoulderTilt.length > 0 ? Math.max(...m.avgShoulderTilt).toFixed(3) : 'N/A',
         bodyRollRange: (m.shoulderTiltMax !== -Infinity && m.shoulderTiltMin !== Infinity)
             ? (m.shoulderTiltMax - m.shoulderTiltMin).toFixed(3) : 'N/A',
         // --- Head ---
-        avgHeadDiff: avg(m.headPositionDiffs),
+        avgHeadDiff: trimmedAvg(m.headPositionDiffs),
         headStabilityVariance: stddev(m.headYPositions),
         // --- Body Line ---
-        avgBodyAngle: avg(m.bodyLineAngles),
+        avgBodyAngle: trimmedAvg(m.bodyLineAngles),
         hipDropPct: pct(m.hipDropCount),
         // --- Wrist Entry ---
-        avgWristEntryWidth: avg(m.wristEntryPositions),
+        avgWristEntryWidth: trimmedAvg(m.wristEntryPositions),
         // --- Kick Tempo ---
         kickTempoCV: cv(m.leftAnkleYHistory.length > m.rightAnkleYHistory.length ? m.leftAnkleYHistory : m.rightAnkleYHistory),
         // --- Arm Pattern ---
@@ -1165,13 +1239,25 @@ function computeSummary() {
         armAlternationPct: pct(m.armAlternationScore),
         armSimultaneousPct: pct(m.armSimultaneousScore),
         // --- Breaststroke ---
-        avgKneeWidthRatio: avg(m.kneeWidthRatios),
-        armSymmetry: avg(m.armSymmetryScores),
+        avgKneeWidthRatio: trimmedAvg(m.kneeWidthRatios),
+        armSymmetry: trimmedAvg(m.armSymmetryScores),
         glideToActiveRatio: (m.glideFrames + m.activeFrames) > 0
             ? (m.glideFrames / (m.glideFrames + m.activeFrames)).toFixed(2) : 'N/A',
         // --- Butterfly ---
-        avgUndulation: avg(m.bodyUndulationAmplitudes),
+        avgUndulation: trimmedAvg(m.bodyUndulationAmplitudes),
         undulationCV: cv(m.bodyUndulationAmplitudes),
+        // --- NEW: Left/Right Symmetry Analysis ---
+        elbowSymmetry: m.avgLeftElbowAngle.length > 0 && m.avgRightElbowAngle.length > 0
+            ? (1 - Math.abs(parseFloat(avg(m.avgLeftElbowAngle)) - parseFloat(avg(m.avgRightElbowAngle))) / 180).toFixed(2)
+            : 'N/A',
+        kneeSymmetry: m.avgLeftKneeAngle.length > 0 && m.avgRightKneeAngle.length > 0
+            ? (1 - Math.abs(parseFloat(avg(m.avgLeftKneeAngle)) - parseFloat(avg(m.avgRightKneeAngle))) / 180).toFixed(2)
+            : 'N/A',
+        // --- NEW: Data Quality Indicators ---
+        dataQuality: {
+            totalFrames: total,
+            validFrameRatio: frameCount > 0 ? (total / Math.ceil(frameCount / 3)).toFixed(2) : '0',
+        }
     };
 }
 

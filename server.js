@@ -43,8 +43,8 @@ app.post('/api/chat', async (req, res) => {
             body: JSON.stringify({
                 model: "deepseek-chat", // DeepSeek V3
                 messages: messages,
-                temperature: 0.7,
-                max_tokens: 1000,
+                temperature: 0.5,
+                max_tokens: 2000,
                 stream: true
             })
         });
@@ -162,7 +162,7 @@ const systemPrompt = [
 '2. ASYNCHRONOUS ARMS (armSimultaneous <70%): Cause: Uneven strength. Effect: Erratic propulsion. Cue: "Hands enter and exit exactly together."',
 '3. INCONSISTENT RHYTHM (undulationCV >30%): Cause: Missing the 2-beat kick. Effect: Stalls momentum. Cue: "Small kick in, big kick out."',
 '',
-'=== HIGH-IMPACT DRILL LIBRARY ===',
+'\n--- FREESTYLE (ADDITIONAL) ---\n6. OVER-ROTATION (bodyRollRange >0.15): Cause: Excessive hip roll. Effect: Loss of streamline. Cue: "Roll to 45 degrees, not 90."\n7. WIDE HAND ENTRY (avgWristEntryWidth >1.5): Cause: Hands entering too far from shoulder. Effect: Reduced stroke length. Cue: "Enter at 11 and 1, not 9 and 3."\n8. INCONSISTENT KICK TEMPO (kickTempoCV >35%): Cause: Irregular kick rhythm. Effect: Disrupts streamline. Cue: "Steady 6-beat kick, think metronome."\n\n--- BACKSTROKE (ADDITIONAL) ---\n5. OVER-ROTATION (bodyRollRange >0.15): Excessive rolling wastes energy and disrupts catch timing.\n\n--- BREASTSTROKE (ADDITIONAL) ---\n4. OVER-GLIDING (glideToActiveRatio >0.50): Cause: Holding streamline too long. Effect: Decelerating before next pull. Cue: "Start the pull the moment you feel the glide slowing."\n\n=== HIGH-IMPACT DRILL LIBRARY ===',
 'Match these EXACT drills to the identified root cause. Do NOT invent your own drills! Copy the drill name and reason EXACTLY.',
 '',
 '[Freestyle Drills]',
@@ -185,7 +185,7 @@ const systemPrompt = [
 '- One-Arm Fly Drill: Swim butterfly using only one arm while the other rests forward. Why: Isolates the catch phase, directly fixing a dropped elbow and building timing rhythm cleanly.',
 '- 3-Kicks 1-Pull Drill: Perform 3 undulation kicks for every 1 arm pull. Why: Corrects an inconsistent rhythm by forcing the rhythm to originate from the core wave rather than the arms.',
 '',
-'=== REPORT STRUCTURE ===',
+'\n=== SCORING VERIFICATION (SELF-CHECK) ===\nAfter computing all 5 dimension scores, you MUST perform this self-check:\n1. Verify: Overall = (0.25 x Arm) + (0.25 x Kick) + (0.15 x Breathing) + (0.20 x Body) + (0.15 x Rhythm). The final Overall score MUST match.\n2. If a dimension is rated Excellent (95), it MUST NOT appear in Improvement Suggestions.\n3. If a dimension is rated Needs Work (50) or Poor (20), it MUST appear in Improvement Suggestions.\n4. Exactly 1-2 High Priority and 0-1 Medium Priority suggestions. Never more than 3 total.\n\n=== REPORT STRUCTURE ===',
 'Follow this structure exactly. Use markdown formatting.',
 '',
 '# Swim Technique Report',
@@ -225,6 +225,9 @@ const systemPrompt = [
 
 
 
+        const dataQuality = JSON.parse(data)?.dataQuality || {};
+        const qualityNote = dataQuality.totalFrames < 20 ? "WARNING: Low frame count. Be conservative in assessments." : "";
+
         const userMessage = `Here is the swimmer's pose-tracking data from video analysis. Generate the coaching report following the exact structure and scoring criteria specified.
 
 Stroke Type: ${stroke}
@@ -251,7 +254,7 @@ Important reminders:
                     { role: "system", content: systemPrompt },
                     { role: "user", content: userMessage }
                 ],
-                temperature: 0.5,
+                temperature: 0.3,
                 max_tokens: 2500,
                 stream: true
             })
